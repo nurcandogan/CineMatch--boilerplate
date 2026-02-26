@@ -166,8 +166,9 @@ model User {
   impersonations  Session[]        @relation("SessionToImpersonatedBy")
   userPermissions UserPermission[] @relation("UserToUserPermission")
   company         Company[]        @relation("CompanyToOwner")
-  CompanyMember   CompanyMember[]  @relation("UserToCompanyMember")
-  projects        Project[]        @relation("ProjectToUser")
+  CompanyMember     CompanyMember[]        @relation("UserToCompanyMember")
+  projects          Project[]              @relation("ProjectToUser")
+  movieInteractions UserMovieInteraction[] @relation("UserToMovieInteraction")
 
   @@index([deletedAt])
   @@index([scope])
@@ -693,4 +694,28 @@ model Project {
   @@index([status])
   @@index([deletedAt])
   @@map("projects")
+}
+
+// UserMovieInteraction - Kullanıcıların filmlerle olan etkileşimleri (İzledi / Puan verdi)
+model UserMovieInteraction {
+  /// @prismabox.hide
+  id Int @id @default(autoincrement())
+
+  userId String @map("user_id")
+  user   User   @relation("UserToMovieInteraction", fields: [userId], references: [id], onDelete: Cascade)
+
+  tmdbMovieId Int @map("tmdb_movie_id")
+
+  isWatched Boolean @default(false) @map("is_watched")
+
+  /// @prismabox.options{minimum:1,maximum:5}
+  rating Int?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, tmdbMovieId])
+  @@index([userId])
+  @@index([tmdbMovieId])
+  @@map("user_movie_interactions")
 }
