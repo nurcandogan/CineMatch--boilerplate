@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Flame, Laugh, Ghost, Heart, Clock, Clapperboard, RefreshCcw, UserCircle, PlaySquare, Eye, Star } from 'lucide-react';
-import { api } from '#/lib/api';
+import { tmdb } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { MovieCard } from './movie-card';
 import { cn } from '#/lib/utils';
@@ -22,10 +22,8 @@ export function ExploreMovies() {
     const { data: discoverResponse, isLoading: isDiscoverLoading } = useQuery({
         queryKey: ['movies-discover', mood, maxDuration, page],
         queryFn: async () => {
-            const res = await api.movies.discover.get({
-                query: { mood, maxDuration: maxDuration || undefined, page },
-            });
-            return res.data;
+            const res = await tmdb.discover({ mood, maxDuration: maxDuration || undefined, page });
+            return res;
         },
         enabled: activeTab === 'discover',
     });
@@ -34,8 +32,8 @@ export function ExploreMovies() {
     const { data: interactionsResponse, refetch: refetchInteractions } = useQuery({
         queryKey: ['movies-interactions'],
         queryFn: async () => {
-            const res = await api.movies.interactions.get();
-            return res.data;
+            const res = tmdb.getMovieInteractions();
+            return res;
         },
     });
 

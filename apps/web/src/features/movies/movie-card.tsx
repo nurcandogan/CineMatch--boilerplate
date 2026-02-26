@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Eye, Star, Info } from 'lucide-react';
 import { cn } from '#/lib/utils';
-import { api } from '#/lib/api';
+import { tmdb } from '#/lib/tmdb';
 
 export function MovieCard({ movie, interactions, onInteract }: { movie: any, interactions: any[], onInteract: () => void }) {
     const [isRatingOpen, setIsRatingOpen] = useState(false);
@@ -10,18 +10,18 @@ export function MovieCard({ movie, interactions, onInteract }: { movie: any, int
     const userRating = interaction?.rating || 0;
 
     const handleWatchToggle = async () => {
-        await api.movies({ tmdbMovieId: movie.id }).interact.post({
+        tmdb.saveMovieInteraction(movie.id, {
             isWatched: !isWatched,
             rating: userRating || undefined,
-        });
+        }, movie);
         onInteract();
     };
 
     const handleRating = async (rating: number) => {
-        await api.movies({ tmdbMovieId: movie.id }).interact.post({
+        tmdb.saveMovieInteraction(movie.id, {
             isWatched: true, // Auto watch if rated
             rating: rating,
-        });
+        }, movie);
         setIsRatingOpen(false);
         onInteract();
     };
