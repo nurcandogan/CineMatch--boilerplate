@@ -2,7 +2,7 @@ import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { Flame, Laugh, Ghost, Heart, Clock, Clapperboard, RefreshCcw, UserCircle, PlaySquare, Eye, Star, ChevronLeft, ChevronRight, Zap, Cloud, Coffee, Lightbulb, PartyPopper, Smile } from 'lucide-react';
 import { tmdb } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
-import { MovieCard } from './movie-card';
+import { MovieCard } from './components/movie-card';
 import { cn } from '#/lib/utils';
 import { useState, useEffect, useRef } from 'react';
 
@@ -90,6 +90,22 @@ export function ExploreMovies() {
 
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % trendingMovies.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + trendingMovies.length) % trendingMovies.length);
+
+    const handleWatchToggle = (movie: any, isWatched: boolean, userRating: number) => {
+        tmdb.saveMovieInteraction(movie.id, {
+            isWatched: !isWatched,
+            rating: userRating || undefined,
+        }, movie);
+        refetchInteractions();
+    };
+
+    const handleRate = (movie: any, rating: number) => {
+        tmdb.saveMovieInteraction(movie.id, {
+            isWatched: true, // Auto watch if rated
+            rating: rating,
+        }, movie);
+        refetchInteractions();
+    };
 
     const movies = discoverResponse?.pages.flatMap(page => page.results) || [];
     // Ensure we get an array, and handle cases where it might be structured differently due to generic types
@@ -208,14 +224,21 @@ export function ExploreMovies() {
                         ) : movies.length > 0 ? (
                             <div className="animate-in slide-in-from-bottom-4 duration-500 pt-4">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                    {movies.map((movie: any, idx: number) => (
-                                        <MovieCard
-                                            key={`${movie.id}-${idx}`}
-                                            movie={movie}
-                                            interactions={interactions}
-                                            onInteract={() => refetchInteractions()}
-                                        />
-                                    ))}
+                                    {movies.map((movie: any, idx: number) => {
+                                        const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
+                                        const isWatched = interaction?.isWatched || false;
+                                        const userRating = interaction?.rating || 0;
+                                        return (
+                                            <MovieCard
+                                                key={`${movie.id}-${idx}`}
+                                                movie={movie}
+                                                isWatched={isWatched}
+                                                userRating={userRating}
+                                                onWatchToggle={() => handleWatchToggle(movie, isWatched, userRating)}
+                                                onRate={(rating) => handleRate(movie, rating)}
+                                            />
+                                        )
+                                    })}
                                 </div>
 
                                 {hasNextPage && (
@@ -247,8 +270,10 @@ export function ExploreMovies() {
                                         <MovieCard
                                             key={interaction.tmdbMovieId}
                                             movie={interaction.movie}
-                                            interactions={interactions}
-                                            onInteract={() => refetchInteractions()}
+                                            isWatched={interaction.isWatched}
+                                            userRating={interaction.rating || 0}
+                                            onWatchToggle={() => handleWatchToggle(interaction.movie, interaction.isWatched, interaction.rating || 0)}
+                                            onRate={(rating) => handleRate(interaction.movie, rating)}
                                         />
                                     ))}
                                 </div>
@@ -271,8 +296,10 @@ export function ExploreMovies() {
                                         <MovieCard
                                             key={interaction.tmdbMovieId}
                                             movie={interaction.movie}
-                                            interactions={interactions}
-                                            onInteract={() => refetchInteractions()}
+                                            isWatched={interaction.isWatched}
+                                            userRating={interaction.rating || 0}
+                                            onWatchToggle={() => handleWatchToggle(interaction.movie, interaction.isWatched, interaction.rating || 0)}
+                                            onRate={(rating) => handleRate(interaction.movie, rating)}
                                         />
                                     ))}
                                 </div>

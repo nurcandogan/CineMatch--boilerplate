@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex flex-col font-sans">
-      {/* NETFLIX STYLE NAVBAR */}
+      {/* NAVBAR */}
       <header
         className={cn(
           "fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-12 h-16 transition-colors duration-300",
