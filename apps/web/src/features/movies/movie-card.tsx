@@ -5,7 +5,9 @@ import { tmdb } from '#/lib/tmdb';
 
 export function MovieCard({ movie, interactions, onInteract }: { movie: any, interactions: any[], onInteract: () => void }) {
     const [isRatingOpen, setIsRatingOpen] = useState(false);
-    const interaction = interactions.find(i => i.tmdbMovieId === movie.id);
+    const [isImgLoaded, setIsImgLoaded] = useState(false);
+
+    const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
     const isWatched = interaction?.isWatched || false;
     const userRating = interaction?.rating || 0;
 
@@ -31,29 +33,36 @@ export function MovieCard({ movie, interactions, onInteract }: { movie: any, int
         : 'https://via.placeholder.com/500x750?text=No+Poster';
 
     return (
-        <div className="group relative overflow-hidden rounded-2xl bg-black/40 border border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_8px_40px_rgba(120,0,255,0.2)]">
+        <div className="group relative overflow-hidden rounded-2xl bg-muted/20 dark:bg-black/40 border border-border hover:border-primary/50 shadow-sm hover:shadow-xl dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1">
             {/* Aspect Ratio 2:3 */}
-            <div className="relative aspect-[2/3] w-full overflow-hidden">
+            <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted/40 dark:bg-muted/10">
+                {!isImgLoaded && (
+                    <div className="absolute inset-0 bg-muted-foreground/10 animate-pulse z-0" />
+                )}
                 <img
                     src={posterUrl}
                     alt={movie.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onLoad={() => setIsImgLoaded(true)}
+                    className={cn(
+                        "h-full w-full object-cover transition-all duration-700 z-0 relative",
+                        isImgLoaded ? "opacity-100 group-hover:scale-105" : "opacity-0 scale-95"
+                    )}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
 
                 {/* Floating Rating Badge */}
-                <div className="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur-md border border-white/10">
+                <div className="absolute top-4 right-4 z-20 flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 backdrop-blur-md border border-white/10 shadow-lg">
                     <Star className="h-3.5 w-3.5 fill-yellow-500 text-yellow-500" />
-                    <span className="text-xs font-medium text-white">{movie.vote_average?.toFixed(1)}</span>
+                    <span className="text-xs font-bold text-white tracking-wide">{movie.vote_average?.toFixed(1)}</span>
                 </div>
 
                 {/* Hover Actions */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-300 group-hover:opacity-100 bg-black/40 backdrop-blur-[2px]">
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100 bg-black/50 backdrop-blur-[2px]">
                     <button
                         onClick={handleWatchToggle}
                         className={cn(
-                            "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-lg",
-                            isWatched ? "bg-green-500/90 text-white" : "bg-white/10 text-white backdrop-blur-md border border-white/20 hover:bg-white/20"
+                            "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-xl",
+                            isWatched ? "bg-green-500 text-white" : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-white/30"
                         )}
                     >
                         <Eye className="h-5 w-5" />
@@ -63,8 +72,8 @@ export function MovieCard({ movie, interactions, onInteract }: { movie: any, int
                         <button
                             onClick={() => setIsRatingOpen(!isRatingOpen)}
                             className={cn(
-                                "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-lg",
-                                userRating > 0 ? "bg-yellow-500/90 text-black" : "bg-white/10 text-white backdrop-blur-md border border-white/20 hover:bg-white/20"
+                                "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-xl",
+                                userRating > 0 ? "bg-yellow-500 text-black" : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-white/30"
                             )}
                         >
                             <Star className={cn("h-5 w-5", userRating > 0 && "fill-current")} />
@@ -72,7 +81,7 @@ export function MovieCard({ movie, interactions, onInteract }: { movie: any, int
 
                         {/* Rating Stars Expandable */}
                         {isRatingOpen && (
-                            <div className="flex gap-1 rounded-full bg-black/80 px-3 py-2 backdrop-blur-xl border border-white/10 animate-in fade-in zoom-in duration-200">
+                            <div className="flex gap-1 rounded-full bg-black/90 px-3 py-2 backdrop-blur-xl border border-white/20 animate-in fade-in zoom-in duration-200 shadow-2xl">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <button
                                         key={star}
@@ -91,18 +100,18 @@ export function MovieCard({ movie, interactions, onInteract }: { movie: any, int
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                <h3 className="text-xl font-bold text-white line-clamp-1 mb-1 shadow-black drop-shadow-md">
+            <div className="absolute bottom-0 left-0 w-full z-30 p-4 md:p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                <h3 className="text-lg font-bold text-white line-clamp-1 mb-1 drop-shadow-md">
                     {movie.title}
                 </h3>
-                <p className="text-sm font-medium text-white/70 line-clamp-2 md:line-clamp-3 mb-2">
-                    {movie.overview}
+                <p className="text-xs font-medium text-white/80 line-clamp-2 mb-2 drop-shadow-sm">
+                    {movie.overview || "Filmin açıklaması bulunmuyor."}
                 </p>
-                <div className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                    <span>{new Date(movie.release_date).getFullYear()}</span>
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs text-white/60 font-semibold uppercase tracking-wider">
+                    <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : 'Bilinmiyor'}</span>
                     <span>•</span>
-                    <span className="flex items-center gap-1 text-purple-400">
-                        <Info className="h-3 w-3" /> Info
+                    <span className="flex items-center gap-1 text-primary-400 dark:text-purple-400">
+                        <Info className="h-3 w-3" /> Detaylar
                     </span>
                 </div>
             </div>

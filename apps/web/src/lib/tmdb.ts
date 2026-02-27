@@ -26,10 +26,14 @@ export const tmdb = {
         // TMDB genre mapping
         if (query.mood) {
             const moodMap: Record<string, string> = {
-                'rahat': '35,10751', // Comedy, Family
-                'hareketli': '28,53', // Action, Thriller
-                'duygusal': '18,10749', // Drama, Romance
-                'gizemli': '9648,878' // Mystery, Sci-Fi
+                'keyifli': '35,10751', // Comedy, Family
+                'heyecanli': '28,53', // Action, Thriller
+                'romantik': '10749', // Romance
+                'melankolik': '18', // Drama
+                'gizemli': '9648', // Mystery
+                'sakin': '99,36', // Documentary, History
+                'eglenceli': '12,16', // Adventure, Animation
+                'zihin_acici': '878,14' // Sci-Fi, Fantasy
             };
             const mood = query.mood.toLowerCase();
             const genres = moodMap[mood];
