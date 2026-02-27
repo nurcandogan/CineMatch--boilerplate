@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Eye, Star, Info } from 'lucide-react';
 import { cn } from '#/lib/utils';
 
@@ -10,7 +10,7 @@ export interface MovieCardProps {
     onRate: (rating: number) => void;
 }
 
-export function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate }: MovieCardProps) {
+export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate }: MovieCardProps) {
     const [isRatingOpen, setIsRatingOpen] = useState(false);
     const [isImgLoaded, setIsImgLoaded] = useState(false);
 
@@ -108,4 +108,8 @@ export function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate 
             </div>
         </div>
     );
-}
+}, (prev, next) => {
+    return prev.movie?.id === next.movie?.id &&
+        prev.isWatched === next.isWatched &&
+        prev.userRating === next.userRating;
+});

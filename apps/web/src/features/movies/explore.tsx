@@ -1,10 +1,11 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { Flame, Laugh, Ghost, Heart, Clock, Clapperboard, RefreshCcw, UserCircle, PlaySquare, Eye, Star, ChevronLeft, ChevronRight, Zap, Cloud, Coffee, Lightbulb, PartyPopper, Smile } from 'lucide-react';
 import { tmdb } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { MovieCard } from './components/movie-card';
+import { MoodButton } from './components/mood-button';
 import { cn } from '#/lib/utils';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 const MOODS = [
     { id: 'keyifli', label: 'Keyifli', icon: Smile, color: 'from-orange-400 to-yellow-400' },
@@ -20,6 +21,7 @@ const MOODS = [
 export function ExploreMovies() {
     const { mood, maxDuration, activeTab, setMood, setMaxDuration } = useMovieStore();
     const loadMoreRef = useRef<HTMLDivElement>(null);
+    const queryClient = useQueryClient();
 
     // Discover Query with Infinite Scrolling
     const {
@@ -59,7 +61,7 @@ export function ExploreMovies() {
     }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
     // User Interactions Query
-    const { data: interactionsResponse, refetch: refetchInteractions } = useQuery({
+    const { data: interactionsResponse } = useQuery({
         queryKey: ['movies-interactions'],
         queryFn: async () => {
             const res = tmdb.getMovieInteractions();
@@ -91,21 +93,45 @@ export function ExploreMovies() {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % trendingMovies.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + trendingMovies.length) % trendingMovies.length);
 
-    const handleWatchToggle = (movie: any, isWatched: boolean, userRating: number) => {
-        tmdb.saveMovieInteraction(movie.id, {
-            isWatched: !isWatched,
-            rating: userRating || undefined,
-        }, movie);
-        refetchInteractions();
-    };
+    const handleWatchToggle = useCallback((movie: any, isWatched: boolean, userRating: number) => {
+        const newData = { isWatched: !isWatched, rating: userRating || undefined };
 
-    const handleRate = (movie: any, rating: number) => {
-        tmdb.saveMovieInteraction(movie.id, {
-            isWatched: true, // Auto watch if rated
-            rating: rating,
-        }, movie);
-        refetchInteractions();
-    };
+        // 1. Optimistic UI Update (Anında arayüzü kasmadan günceller)
+        queryClient.setQueryData(['movies-interactions'], (old: any) => {
+            const oldArr = Array.isArray(old) ? old : [];
+            const index = oldArr.findIndex((i: any) => i.tmdbMovieId === movie.id);
+            if (index > -1) {
+                const newArr = [...oldArr];
+                newArr[index] = { ...newArr[index], ...newData, movie };
+                return newArr;
+            } else {
+                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie }];
+            }
+        });
+
+        // 2. Background Task (Sessizce LocalStorage veya API'ye yazar)
+        tmdb.saveMovieInteraction(movie.id, newData, movie);
+    }, [queryClient]);
+
+    const handleRate = useCallback((movie: any, rating: number) => {
+        const newData = { isWatched: true, rating };
+
+        // 1. Optimistic UI Update
+        queryClient.setQueryData(['movies-interactions'], (old: any) => {
+            const oldArr = Array.isArray(old) ? old : [];
+            const index = oldArr.findIndex((i: any) => i.tmdbMovieId === movie.id);
+            if (index > -1) {
+                const newArr = [...oldArr];
+                newArr[index] = { ...newArr[index], ...newData, movie };
+                return newArr;
+            } else {
+                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie }];
+            }
+        });
+
+        // 2. Background Task
+        tmdb.saveMovieInteraction(movie.id, newData, movie);
+    }, [queryClient]);
 
     const movies = discoverResponse?.pages.flatMap(page => page.results) || [];
     // Ensure we get an array, and handle cases where it might be structured differently due to generic types
@@ -168,19 +194,13 @@ export function ExploreMovies() {
                                 {MOODS.map((m) => {
                                     const isActive = mood === m.id;
                                     return (
-                                        <button
+                                        <MoodButton
                                             key={m.id}
+                                            label={m.label}
+                                            icon={m.icon}
+                                            isActive={isActive}
                                             onClick={() => setMood(isActive ? undefined : m.id)}
-                                            className={cn(
-                                                "flex items-center gap-1.5 md:gap-2 px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 transform",
-                                                isActive
-                                                    ? "bg-white text-black scale-110 shadow-[0_0_30px_rgba(255,255,255,0.4)]"
-                                                    : "bg-black/40 border border-white/20 text-white hover:bg-white/20 hover:scale-105 backdrop-blur-md"
-                                            )}
-                                        >
-                                            <m.icon className="w-4 h-4 md:w-5 md:h-5" />
-                                            {m.label}
-                                        </button>
+                                        />
                                     );
                                 })}
                             </div>
