@@ -1,7 +1,7 @@
 import { Main } from '#/components/layout/main';
-import { ThemeSwitch } from '#/components/theme-switch';
 import { ExplorePage } from '#/features/movies/pages/explore-page';
 import { SearchIcon, Bell } from 'lucide-react';
+import { ThemeSwitch } from '#/components/theme-switch';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { cn } from '#/lib/utils';
 import { useEffect, useState } from 'react';

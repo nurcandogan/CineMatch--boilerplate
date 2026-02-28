@@ -4,9 +4,10 @@ import { useMovieStore } from '#/stores/useMovieStore';
 import { MOODS } from '../constants';
 import { MoodButton } from './mood-button';
 import { useSlider } from '../hooks/use-slider';
+import type { Movie } from '../types';
 
 interface HeroSliderProps {
-    trendingMovies: any[];
+    trendingMovies: Movie[];
 }
 
 export function HeroSlider({ trendingMovies }: HeroSliderProps) {
@@ -20,7 +21,7 @@ export function HeroSlider({ trendingMovies }: HeroSliderProps) {
     return (
         <div className="-mx-4 md:-mx-10 lg:-mx-16 -mt-16 relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
             {/* Background Images */}
-            {trendingMovies.map((movie: any, idx: number) => {
+            {trendingMovies.map((movie: Movie, idx: number) => {
                 const bgUrl = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
                 return (
                     <div

@@ -1,0 +1,23 @@
+export interface Movie {
+    id: number;
+    title: string;
+    overview: string;
+    poster_path: string | null;
+    backdrop_path: string | null;
+    release_date: string;
+    vote_average: number;
+}
+
+export interface MovieInteraction {
+    tmdbMovieId: number;
+    isWatched: boolean;
+    rating?: number;
+    movie: Movie;
+}
+
+export interface DiscoverResponse {
+    page: number;
+    results: Movie[];
+    total_pages: number;
+    total_results: number;
+}

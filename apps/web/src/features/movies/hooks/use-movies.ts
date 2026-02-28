@@ -1,13 +1,14 @@
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { tmdb } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
+import type { Movie, MovieInteraction } from '../types';
+import { movieQueries } from '../queries/movie-queries';
 
 export function useMovies() {
     const { mood, maxDuration, activeTab } = useMovieStore();
     const queryClient = useQueryClient();
 
-    // 1. Discover movies with infinite scrolling
     const {
         data: discoverResponse,
         isLoading: isDiscoverLoading,
@@ -15,73 +16,60 @@ export function useMovies() {
         fetchNextPage,
         hasNextPage
     } = useInfiniteQuery({
-        queryKey: ['movies-discover', mood, maxDuration],
-        queryFn: async ({ pageParam = 1 }) => {
-            return await tmdb.discover({ mood, maxDuration: maxDuration || undefined, page: pageParam });
-        },
-        getNextPageParam: (lastPage) => {
-            return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined;
-        },
-        initialPageParam: 1,
+        ...movieQueries.discover(mood, maxDuration),
         enabled: activeTab === 'discover',
     });
 
-    const movies = discoverResponse?.pages.flatMap(page => page.results) || [];
+    const movies = useMemo(() => {
+        return discoverResponse?.pages.flatMap(page => page.results) || [];
+    }, [discoverResponse]);
 
     // 2. Fetch User Interactions (Watched & Rated)
-    const { data: interactionsResponse } = useQuery({
-        queryKey: ['movies-interactions'],
-        queryFn: () => tmdb.getMovieInteractions(),
-    });
+    const { data: interactionsResponse } = useQuery(movieQueries.interactions());
 
-    const interactions = Array.isArray(interactionsResponse) ? interactionsResponse : [];
-    const watchedMovies = interactions.filter(i => i.isWatched && i.movie);
-    const ratedMovies = interactions.filter(i => i.rating && i.movie);
+    const interactions = useMemo(() => {
+        return Array.isArray(interactionsResponse) ? interactionsResponse : [];
+    }, [interactionsResponse]);
+
+    const watchedMovies = useMemo(() => {
+        return interactions.filter(i => i.isWatched && i.movie);
+    }, [interactions]);
+
+    const ratedMovies = useMemo(() => {
+        return interactions.filter(i => i.rating && i.movie);
+    }, [interactions]);
 
     // 3. Fetch Trending Movies for background slider
-    const { data: trendingResponse } = useQuery({
-        queryKey: ['movies-trending'],
-        queryFn: () => tmdb.discover({}),
-    });
+    const { data: trendingResponse } = useQuery(movieQueries.trending());
 
-    const trendingMovies = trendingResponse?.results?.slice(0, 10) || [];
+    const trendingMovies = useMemo(() => {
+        return trendingResponse?.results?.slice(0, 10) || [];
+    }, [trendingResponse]);
 
-    // 4. Optimistic Mutators
-    const handleWatchToggle = useCallback((movie: any, isWatched: boolean, userRating: number) => {
-        const newData = { isWatched: !isWatched, rating: userRating || undefined };
-
-        queryClient.setQueryData(['movies-interactions'], (old: any) => {
+    // 4. Optimistic Mutators helper
+    const updateInteractionOptimistically = useCallback((movie: Movie, newData: { isWatched: boolean; rating?: number }) => {
+        queryClient.setQueryData(movieQueries.interactions().queryKey, (old: MovieInteraction[] | undefined) => {
             const oldArr = Array.isArray(old) ? old : [];
-            const index = oldArr.findIndex((i: any) => i.tmdbMovieId === movie.id);
+            const index = oldArr.findIndex((i) => i.tmdbMovieId === movie.id);
             if (index > -1) {
                 const newArr = [...oldArr];
                 newArr[index] = { ...newArr[index], ...newData, movie };
                 return newArr;
             } else {
-                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie }];
+                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie } as MovieInteraction];
             }
         });
 
         tmdb.saveMovieInteraction(movie.id, newData, movie);
     }, [queryClient]);
 
-    const handleRate = useCallback((movie: any, rating: number) => {
-        const newData = { isWatched: true, rating };
+    const handleWatchToggle = useCallback((movie: Movie, isWatched: boolean, userRating: number) => {
+        updateInteractionOptimistically(movie, { isWatched: !isWatched, rating: userRating || undefined });
+    }, [updateInteractionOptimistically]);
 
-        queryClient.setQueryData(['movies-interactions'], (old: any) => {
-            const oldArr = Array.isArray(old) ? old : [];
-            const index = oldArr.findIndex((i: any) => i.tmdbMovieId === movie.id);
-            if (index > -1) {
-                const newArr = [...oldArr];
-                newArr[index] = { ...newArr[index], ...newData, movie };
-                return newArr;
-            } else {
-                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie }];
-            }
-        });
-
-        tmdb.saveMovieInteraction(movie.id, newData, movie);
-    }, [queryClient]);
+    const handleRate = useCallback((movie: Movie, rating: number) => {
+        updateInteractionOptimistically(movie, { isWatched: true, rating });
+    }, [updateInteractionOptimistically]);
 
     return {
         // State and queries

@@ -1,9 +1,10 @@
 import { useState, memo } from 'react';
 import { Eye, Star, Info } from 'lucide-react';
 import { cn } from '#/lib/utils';
+import type { Movie } from '../types';
 
 export interface MovieCardProps {
-    movie: any;
+    movie: Movie;
     isWatched: boolean;
     userRating: number;
     onWatchToggle: () => void;

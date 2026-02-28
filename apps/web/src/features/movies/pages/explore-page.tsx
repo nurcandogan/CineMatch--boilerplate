@@ -4,6 +4,7 @@ import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
 import { useMovies } from '../hooks/use-movies';
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
+import type { Movie, MovieInteraction } from '../types';
 
 export function ExplorePage() {
     const { activeTab } = useMovieStore();
@@ -52,7 +53,7 @@ export function ExplorePage() {
                         ) : movies.length > 0 ? (
                             <div className="animate-in slide-in-from-bottom-4 duration-500 pt-4">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                    {movies.map((movie: any, idx: number) => {
+                                    {movies.map((movie: Movie, idx: number) => {
                                         const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
                                         const isWatched = interaction?.isWatched || false;
                                         const userRating = interaction?.rating || 0;
@@ -94,7 +95,7 @@ export function ExplorePage() {
                             </h2>
                             {watchedMovies.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                    {watchedMovies.map((interaction: any) => (
+                                    {watchedMovies.map((interaction: MovieInteraction) => (
                                         <MovieCard
                                             key={interaction.tmdbMovieId}
                                             movie={interaction.movie}
@@ -120,7 +121,7 @@ export function ExplorePage() {
                             </h2>
                             {ratedMovies.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                    {ratedMovies.map((interaction: any) => (
+                                    {ratedMovies.map((interaction: MovieInteraction) => (
                                         <MovieCard
                                             key={interaction.tmdbMovieId}
                                             movie={interaction.movie}
