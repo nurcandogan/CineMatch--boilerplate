@@ -1,6 +1,6 @@
 import { Main } from '#/components/layout/main';
 import { ThemeSwitch } from '#/components/theme-switch';
-import { ExploreMovies } from '#/features/movies/explore';
+import { ExplorePage } from '#/features/movies/pages/explore-page';
 import { SearchIcon, Bell } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { cn } from '#/lib/utils';
@@ -77,7 +77,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
       <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1">
-        <ExploreMovies />
+        <ExplorePage />
       </Main>
     </div>
   );
