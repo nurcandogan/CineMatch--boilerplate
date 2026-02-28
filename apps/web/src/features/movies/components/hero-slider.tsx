@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { cn } from '#/lib/utils';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { MOODS } from '../constants';
 import { MoodButton } from './mood-button';
+import { useSlider } from '../hooks/use-slider';
 
 interface HeroSliderProps {
     trendingMovies: any[];
@@ -11,19 +11,11 @@ interface HeroSliderProps {
 
 export function HeroSlider({ trendingMovies }: HeroSliderProps) {
     const { mood, maxDuration, setMood, setMaxDuration } = useMovieStore();
-    const [currentSlide, setCurrentSlide] = useState(0);
 
-    // Auto-advance slider
-    useEffect(() => {
-        if (trendingMovies.length === 0) return;
-        const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % trendingMovies.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [trendingMovies.length]);
-
-    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % trendingMovies.length);
-    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + trendingMovies.length) % trendingMovies.length);
+    const { currentSlide, nextSlide, prevSlide } = useSlider({
+        totalItems: trendingMovies.length,
+        isEnabled: true,
+    });
 
     return (
         <div className="-mx-4 md:-mx-10 lg:-mx-16 -mt-16 relative min-h-screen flex items-center justify-center overflow-hidden bg-black">

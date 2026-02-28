@@ -3,11 +3,10 @@ import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
 import { useMovies } from '../hooks/use-movies';
-import { useEffect, useRef } from 'react';
+import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 
 export function ExplorePage() {
     const { activeTab } = useMovieStore();
-    const loadMoreRef = useRef<HTMLDivElement>(null);
     const {
         movies,
         trendingMovies,
@@ -22,22 +21,11 @@ export function ExplorePage() {
         handleRate
     } = useMovies();
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-                    fetchNextPage();
-                }
-            },
-            { threshold: 0.1, rootMargin: '400px' }
-        );
-
-        if (loadMoreRef.current) {
-            observer.observe(loadMoreRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+    const { loadMoreRef } = useInfiniteScroll({
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
+    });
 
     return (
         <div className="w-full flex-1 animate-in fade-in duration-500 pb-12">
