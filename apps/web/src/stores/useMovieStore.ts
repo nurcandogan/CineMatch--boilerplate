@@ -7,6 +7,8 @@ interface MovieState {
     setMood: (mood: string | undefined) => void;
     setMaxDuration: (duration: number | undefined) => void;
     setActiveTab: (tab: 'discover' | 'profile') => void;
+    selectedMovieId: number | null;
+    setSelectedMovieId: (id: number | null) => void;
     reset: () => void;
 }
 
@@ -17,5 +19,7 @@ export const useMovieStore = create<MovieState>((set) => ({
     setMood: (mood) => set({ mood }),
     setMaxDuration: (maxDuration) => set({ maxDuration }),
     setActiveTab: (activeTab) => set({ activeTab }),
-    reset: () => set({ mood: undefined, maxDuration: undefined, activeTab: 'discover' }),
+    selectedMovieId: null,
+    setSelectedMovieId: (id) => set({ selectedMovieId: id }),
+    reset: () => set({ mood: undefined, maxDuration: undefined, activeTab: 'discover', selectedMovieId: null }),
 }));

@@ -2,6 +2,7 @@ import { RefreshCcw, Eye, Star } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
+import { MovieDetailsModal } from '../components/movie-details-modal';
 import { useMovies } from '../hooks/use-movies';
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 import type { Movie, MovieInteraction } from '../types';
@@ -141,6 +142,8 @@ export function ExplorePage() {
                     </div>
                 )}
             </div>
+            {/* Render Modal */}
+            <MovieDetailsModal />
         </div>
     );
 }

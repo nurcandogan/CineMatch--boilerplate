@@ -61,6 +61,20 @@ export const tmdb = {
         return response.json();
     },
 
+    getMovieDetails: async (id: number) => {
+        let url = `https://api.themoviedb.org/3/movie/${id}?language=tr-TR&append_to_response=credits,videos`;
+
+        if (!TMDB_TOKEN && TMDB_API_KEY) {
+            url += `&api_key=${TMDB_API_KEY}`;
+        }
+
+        const response = await fetch(url, { headers: getHeaders() });
+        if (!response.ok) {
+            throw new Error('TMDB API Error: ' + response.statusText);
+        }
+        return response.json();
+    },
+
     getMovieInteractions: () => {
         const data = localStorage.getItem('cinematch_interactions');
         return data ? JSON.parse(data) : [];

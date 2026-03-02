@@ -1,6 +1,7 @@
 import { useState, memo } from 'react';
 import { Eye, Star, Info } from 'lucide-react';
 import { cn } from '#/lib/utils';
+import { useMovieStore } from '#/stores/useMovieStore';
 import type { Movie } from '../types';
 
 export interface MovieCardProps {
@@ -14,10 +15,17 @@ export interface MovieCardProps {
 export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate }: MovieCardProps) {
     const [isRatingOpen, setIsRatingOpen] = useState(false);
     const [isImgLoaded, setIsImgLoaded] = useState(false);
+    const { setSelectedMovieId } = useMovieStore();
 
     const handleRating = (rating: number) => {
         onRate(rating);
         setIsRatingOpen(false);
+    };
+
+    const handleCardClick = (e: React.MouseEvent) => {
+        // Prevent click if we're clicking the action buttons
+        if ((e.target as HTMLElement).closest('button')) return;
+        setSelectedMovieId(movie.id);
     };
 
     const posterUrl = movie?.poster_path
@@ -25,7 +33,10 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
         : 'https://via.placeholder.com/500x750?text=No+Poster';
 
     return (
-        <div className="group relative overflow-hidden rounded-2xl bg-muted/20 dark:bg-black/40 border border-border hover:border-primary/50 shadow-sm hover:shadow-xl dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1">
+        <div
+            onClick={handleCardClick}
+            className="group relative cursor-pointer overflow-hidden rounded-2xl bg-muted/20 dark:bg-black/40 border border-border hover:border-primary/50 shadow-sm hover:shadow-xl dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+        >
             {/* Aspect Ratio 2:3 */}
             <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted/40 dark:bg-muted/10">
                 {!isImgLoaded && (
