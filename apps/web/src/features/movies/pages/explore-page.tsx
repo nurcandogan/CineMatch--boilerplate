@@ -8,7 +8,7 @@ import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 import type { Movie, MovieInteraction } from '../types';
 
 export function ExplorePage() {
-    const { activeTab } = useMovieStore();
+    const { activeTab, mood, maxDuration } = useMovieStore();
     const {
         movies,
         trendingMovies,
@@ -57,7 +57,7 @@ export function ExplorePage() {
                         ) : movies.length > 0 ? (
                             <div className="animate-in slide-in-from-bottom-4 duration-500 pt-8 pb-12">
 
-                                {!useMovieStore.getState().mood && !useMovieStore.getState().maxDuration && (
+                                {!mood && !maxDuration && (
                                     <div className="space-y-12 mb-12">
                                         {/* Popular */}
                                         {popularMovies?.length > 0 && (
