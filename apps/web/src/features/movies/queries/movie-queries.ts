@@ -25,4 +25,22 @@ export const movieQueries = {
             queryKey: ['movies-trending'],
             queryFn: () => tmdb.discover({}),
         }),
+
+    topRated: () =>
+        queryOptions({
+            queryKey: ['movies-top-rated'],
+            queryFn: () => tmdb.getTopRated(),
+        }),
+
+    upcoming: () =>
+        queryOptions({
+            queryKey: ['movies-upcoming'],
+            queryFn: () => tmdb.getUpcoming(),
+        }),
+
+    popular: () =>
+        queryOptions({
+            queryKey: ['movies-popular'],
+            queryFn: () => tmdb.getPopular(),
+        }),
 };

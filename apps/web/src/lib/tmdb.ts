@@ -61,6 +61,30 @@ export const tmdb = {
         return response.json();
     },
 
+    getTopRated: async () => {
+        let url = "https://api.themoviedb.org/3/movie/top_rated?language=tr-TR&page=1";
+        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        const response = await fetch(url, { headers: getHeaders() });
+        if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
+        return response.json();
+    },
+
+    getUpcoming: async () => {
+        let url = "https://api.themoviedb.org/3/movie/upcoming?language=tr-TR&page=1";
+        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        const response = await fetch(url, { headers: getHeaders() });
+        if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
+        return response.json();
+    },
+
+    getPopular: async () => {
+        let url = "https://api.themoviedb.org/3/movie/popular?language=tr-TR&page=1";
+        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        const response = await fetch(url, { headers: getHeaders() });
+        if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
+        return response.json();
+    },
+
     getMovieDetails: async (id: number) => {
         let url = `https://api.themoviedb.org/3/movie/${id}?language=tr-TR&append_to_response=credits,videos`;
 

@@ -46,6 +46,24 @@ export function useMovies() {
         return trendingResponse?.results?.slice(0, 10) || [];
     }, [trendingResponse]);
 
+    // 3.5. Fetch Categories
+    const { data: topRatedResponse } = useQuery({
+        ...movieQueries.topRated(),
+        enabled: activeTab === 'discover' && !mood && !maxDuration // Sadece filtreleme yokken çek
+    });
+    const { data: upcomingResponse } = useQuery({
+        ...movieQueries.upcoming(),
+        enabled: activeTab === 'discover' && !mood && !maxDuration
+    });
+    const { data: popularResponse } = useQuery({
+        ...movieQueries.popular(),
+        enabled: activeTab === 'discover' && !mood && !maxDuration
+    });
+
+    const topRatedMovies = useMemo(() => topRatedResponse?.results || [], [topRatedResponse]);
+    const upcomingMovies = useMemo(() => upcomingResponse?.results || [], [upcomingResponse]);
+    const popularMovies = useMemo(() => popularResponse?.results || [], [popularResponse]);
+
     // 4. Optimistic Mutators helper
     const updateInteractionOptimistically = useCallback((movie: Movie, newData: { isWatched: boolean; rating?: number }) => {
         queryClient.setQueryData(movieQueries.interactions().queryKey, (old: MovieInteraction[] | undefined) => {
@@ -78,6 +96,9 @@ export function useMovies() {
         interactions,
         watchedMovies,
         ratedMovies,
+        topRatedMovies,
+        upcomingMovies,
+        popularMovies,
 
         // Loaders & Pagination
         isDiscoverLoading,
