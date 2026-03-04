@@ -43,4 +43,16 @@ export const movieQueries = {
             queryKey: ['movies-popular'],
             queryFn: () => tmdb.getPopular(),
         }),
+
+    byGenre: (genreId: number) =>
+        infiniteQueryOptions({
+            queryKey: ['movies-genre', genreId],
+            queryFn: async ({ pageParam = 1 }) => {
+                return await tmdb.getMoviesByGenre(genreId, pageParam as number);
+            },
+            getNextPageParam: (lastPage: any) => {
+                return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined;
+            },
+            initialPageParam: 1,
+        }),
 };

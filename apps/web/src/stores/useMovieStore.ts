@@ -3,10 +3,10 @@ import { create } from 'zustand';
 interface MovieState {
     mood: string | undefined;
     maxDuration: number | undefined;
-    activeTab: 'discover' | 'popular' | 'profile';
+    activeTab: 'discover' | 'popular' | 'profile' | 'movies';
     setMood: (mood: string | undefined) => void;
     setMaxDuration: (duration: number | undefined) => void;
-    setActiveTab: (tab: 'discover' | 'popular' | 'profile') => void;
+    setActiveTab: (tab: 'discover' | 'popular' | 'profile' | 'movies') => void;
     selectedMovieId: number | null;
     setSelectedMovieId: (id: number | null) => void;
     reset: () => void;

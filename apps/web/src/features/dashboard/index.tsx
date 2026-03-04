@@ -1,5 +1,6 @@
 import { Main } from '#/components/layout/main';
 import { ExplorePage } from '#/features/movies/pages/explore-page';
+import { MoviesPage } from '#/features/movies/pages/movies-page';
 import { PopularPage } from '#/features/movies/pages/popular-page';
 import { ProfilePage } from '#/features/movies/pages/profile-page';
 import { SearchIcon, Bell } from 'lucide-react';
@@ -50,8 +51,8 @@ export default function Dashboard() {
               Anasayfa
             </button>
             <button
-              onClick={() => reset()}
-              className="text-muted-foreground hover:text-foreground/80 transition-colors"
+              onClick={() => setActiveTab('movies')}
+              className={cn("transition-colors hover:text-foreground/80", activeTab === 'movies' ? "text-foreground font-bold" : "text-muted-foreground")}
             >
               Filmler
             </button>
@@ -85,6 +86,7 @@ export default function Dashboard() {
       {/* MAIN CONTENT */}
       <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1">
         {activeTab === 'discover' && <ExplorePage />}
+        {activeTab === 'movies' && <MoviesPage />}
         {activeTab === 'popular' && <PopularPage />}
         {activeTab === 'profile' && <ProfilePage />}
       </Main>

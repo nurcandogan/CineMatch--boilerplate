@@ -85,6 +85,14 @@ export const tmdb = {
         return response.json();
     },
 
+    getMoviesByGenre: async (genreId: number, page: number = 1) => {
+        let url = `https://api.themoviedb.org/3/discover/movie?language=tr-TR&sort_by=popularity.desc&page=${page}&with_genres=${genreId}`;
+        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        const response = await fetch(url, { headers: getHeaders() });
+        if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
+        return response.json();
+    },
+
     getMovieDetails: async (id: number) => {
         let url = `https://api.themoviedb.org/3/movie/${id}?language=tr-TR&append_to_response=credits,videos`;
 
