@@ -23,9 +23,28 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
     };
 
     const handleCardClick = (e: React.MouseEvent) => {
-        // Prevent click if we're clicking the action buttons
-        if ((e.target as HTMLElement).closest('button')) return;
+        // Detay açma işlemini eğer herhangi bir .action-btn elementine tıklandıysa engelle (ikinci bir güvenlik katmanı)
+        if ((e.target as HTMLElement).closest('.action-btn')) return;
+
         setSelectedMovieId(movie.id);
+    };
+
+    const onWatchClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onWatchToggle();
+    };
+
+    const onRatingToggleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsRatingOpen((prev) => !prev);
+    };
+
+    const onStarRateClick = (e: React.MouseEvent, star: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleRating(star);
     };
 
     const posterUrl = movie?.poster_path
@@ -60,23 +79,27 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
                 </div>
 
                 {/* Hover Actions */}
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100 bg-black/50 backdrop-blur-[2px]">
+                <div
+                    className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100 bg-black/50 backdrop-blur-[2px]"
+                    onMouseLeave={() => setIsRatingOpen(false)}
+                >
                     <button
-                        onClick={onWatchToggle}
+                        onClick={onWatchClick}
                         className={cn(
-                            "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-xl",
+                            "action-btn flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-xl",
                             isWatched ? "bg-green-500 text-white" : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-white/30"
                         )}
                     >
                         <Eye className="h-5 w-5" />
                     </button>
 
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="relative flex items-center justify-center w-12 h-12">
                         <button
-                            onClick={() => setIsRatingOpen(!isRatingOpen)}
+                            onClick={onRatingToggleClick}
                             className={cn(
-                                "flex h-12 w-12 items-center justify-center rounded-full transition-transform hover:scale-110 shadow-xl",
-                                userRating > 0 ? "bg-yellow-500 text-black" : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-white/30"
+                                "action-btn flex h-12 w-12 items-center justify-center rounded-full transition-transform shadow-xl",
+                                userRating > 0 ? "bg-yellow-500 text-black" : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-white/30",
+                                isRatingOpen ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100 hover:scale-110"
                             )}
                         >
                             <Star className={cn("h-5 w-5", userRating > 0 && "fill-current")} />
@@ -84,16 +107,18 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
 
                         {/* Rating Stars Expandable */}
                         {isRatingOpen && (
-                            <div className="flex gap-1 rounded-full bg-black/90 px-3 py-2 backdrop-blur-xl border border-white/20 animate-in fade-in zoom-in duration-200 shadow-2xl">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center h-14 gap-2 rounded-full bg-black/95 px-5 py-2 backdrop-blur-xl border border-white/20 animate-in zoom-in-95 fade-in duration-200 shadow-[0_10_40px_rgba(0,0,0,0.8)] z-50">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <button
                                         key={star}
-                                        onClick={() => handleRating(star)}
-                                        className="hover:scale-125 transition-transform"
+                                        onClick={(e) => onStarRateClick(e, star)}
+                                        className="action-btn group/star p-1 hover:scale-125 transition-transform"
                                     >
                                         <Star className={cn(
-                                            "h-4 w-4",
-                                            star <= userRating ? "fill-yellow-500 text-yellow-500" : "text-white/40 hover:text-yellow-400"
+                                            "h-6 w-6 transition-all duration-200",
+                                            star <= userRating
+                                                ? "fill-yellow-500 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]"
+                                                : "text-white/40 group-hover/star:text-yellow-400 group-hover/star:drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]"
                                         )} />
                                     </button>
                                 ))}
