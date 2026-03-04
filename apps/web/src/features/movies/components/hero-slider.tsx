@@ -79,11 +79,11 @@ export function HeroSlider({ trendingMovies }: HeroSliderProps) {
                     </div>
 
                     {/* Duration Dropdown */}
-                    <div className="flex items-center gap-2 bg-black/40 border border-white/20 rounded-full px-5 py-2.5 backdrop-blur-md mt-2 hover:bg-white/10 transition-colors">
-                        <Clock className="w-4 h-4 text-white/80" />
-                        <span className="text-white/80 text-sm font-medium">Süre: </span>
+                    <div className="flex items-center gap-3 bg-black/40 border border-white/20 rounded-full px-6 py-3 backdrop-blur-md mt-2 md:mt-4 hover:bg-white/10 transition-colors">
+                        <Clock className="w-5 h-5 text-white/80" />
+                        <span className="text-white/80 text-base font-medium">Süre: </span>
                         <select
-                            className="bg-transparent text-white text-sm font-bold outline-none appearance-none cursor-pointer"
+                            className="bg-transparent text-white text-base font-bold outline-none appearance-none cursor-pointer"
                             value={maxDuration || ''}
                             onChange={(e) => setMaxDuration(e.target.value ? Number(e.target.value) : undefined)}
                         >

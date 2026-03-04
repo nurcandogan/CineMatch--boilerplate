@@ -1,5 +1,7 @@
 import { Main } from '#/components/layout/main';
 import { ExplorePage } from '#/features/movies/pages/explore-page';
+import { PopularPage } from '#/features/movies/pages/popular-page';
+import { ProfilePage } from '#/features/movies/pages/profile-page';
 import { SearchIcon, Bell } from 'lucide-react';
 import { ThemeSwitch } from '#/components/theme-switch';
 import { useMovieStore } from '#/stores/useMovieStore';
@@ -7,7 +9,7 @@ import { cn } from '#/lib/utils';
 import { useEffect, useState } from 'react';
 
 export default function Dashboard() {
-  const { activeTab, setActiveTab } = useMovieStore();
+  const { activeTab, setActiveTab, reset } = useMovieStore();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -35,25 +37,30 @@ export default function Dashboard() {
         <div className="flex items-center gap-8 lg:gap-12">
           {/* LOGO */}
           <span className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none"
-            onClick={() => setActiveTab('discover')}>
+            onClick={() => reset()}>
             CineMatch
           </span>
 
           {/* DESKTOP NAV LINKS */}
           <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
             <button
-              onClick={() => setActiveTab('discover')}
+              onClick={() => reset()}
               className={cn("transition-colors hover:text-foreground/80", activeTab === 'discover' ? "text-foreground font-bold" : "text-muted-foreground")}
             >
               Anasayfa
             </button>
             <button
-              onClick={() => setActiveTab('discover')}
+              onClick={() => reset()}
               className="text-muted-foreground hover:text-foreground/80 transition-colors"
             >
               Filmler
             </button>
-            <button className="text-muted-foreground hover:text-foreground/80 transition-colors">Yeni ve Popüler</button>
+            <button
+              onClick={() => setActiveTab('popular')}
+              className={cn("transition-colors hover:text-foreground/80", activeTab === 'popular' ? "text-foreground font-bold" : "text-muted-foreground")}
+            >
+              Yeni ve Popüler
+            </button>
             <button
               onClick={() => setActiveTab('profile')}
               className={cn("transition-colors hover:text-foreground/80", activeTab === 'profile' ? "text-foreground font-bold" : "text-muted-foreground")}
@@ -77,7 +84,9 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
       <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1">
-        <ExplorePage />
+        {activeTab === 'discover' && <ExplorePage />}
+        {activeTab === 'popular' && <PopularPage />}
+        {activeTab === 'profile' && <ProfilePage />}
       </Main>
     </div>
   );

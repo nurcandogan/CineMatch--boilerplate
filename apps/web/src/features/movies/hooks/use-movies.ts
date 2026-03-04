@@ -57,7 +57,7 @@ export function useMovies() {
     });
     const { data: popularResponse } = useQuery({
         ...movieQueries.popular(),
-        enabled: activeTab === 'discover' && !mood && !maxDuration
+        enabled: activeTab === 'popular' || (activeTab === 'discover' && !mood && !maxDuration)
     });
 
     const topRatedMovies = useMemo(() => topRatedResponse?.results || [], [topRatedResponse]);
