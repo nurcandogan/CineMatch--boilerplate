@@ -7,8 +7,10 @@ export function MovieDetailsModal({
     movie,
     isLoading,
     isWatched,
+    isInWatchlist,
     onClose,
-    onWatchToggle
+    onWatchToggle,
+    onWatchlistToggle
 }: MovieDetailsModalProps) {
     if (!isOpen) return null;
 
@@ -78,15 +80,19 @@ export function MovieDetailsModal({
                                     </button>
 
                                     <button
-                                        onClick={onWatchToggle}
+                                        onClick={onWatchlistToggle}
                                         className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/80 text-white backdrop-blur-md border border-white/30 hover:bg-zinc-700 transition-colors"
-                                        title={isWatched ? "Listeden Çıkar" : "Listeye Ekle"}
+                                        title={isInWatchlist ? "İzleyeceklerimden Çıkar" : "İzleyeceklerime Ekle"}
                                     >
-                                        {isWatched ? <Check className="h-5 w-5 text-green-500" /> : <Plus className="h-5 w-5" />}
+                                        {isInWatchlist ? <Check className="h-5 w-5 text-white" /> : <Plus className="h-5 w-5" />}
                                     </button>
 
-                                    <button className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/80 text-white backdrop-blur-md border border-white/30 hover:bg-zinc-700 transition-colors">
-                                        <ThumbsUp className="h-5 w-5" />
+                                    <button
+                                        onClick={onWatchToggle}
+                                        className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/80 text-white backdrop-blur-md border border-white/30 hover:bg-zinc-700 transition-colors"
+                                        title={isWatched ? "İzlediklerimden Çıkar" : "İzledim Olarak İşaretle"}
+                                    >
+                                        <ThumbsUp className={`h-5 w-5 ${isWatched ? "fill-green-500 text-green-500" : ""}`} />
                                     </button>
                                 </div>
                             </div>

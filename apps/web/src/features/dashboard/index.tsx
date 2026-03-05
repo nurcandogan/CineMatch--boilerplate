@@ -5,7 +5,6 @@ import { PopularPage } from '#/features/movies/pages/popular-page';
 import { ProfilePage } from '#/features/movies/pages/profile-page';
 import { SearchPage } from '#/features/movies/pages/search-page';
 import { SearchIcon, Bell, X } from 'lucide-react';
-import { ThemeSwitch } from '#/components/theme-switch';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { cn } from '#/lib/utils';
 import { useEffect, useState, useRef } from 'react';
@@ -142,7 +141,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <ThemeSwitch />
           <button className="hover:scale-110 transition-transform hover:text-foreground text-foreground/80">
             <Bell className="w-5 h-5" />
           </button>
@@ -168,8 +166,10 @@ export default function Dashboard() {
         movie={movieDetails.movie}
         isLoading={movieDetails.isLoading}
         isWatched={movieDetails.isWatched}
+        isInWatchlist={movieDetails.isInWatchlist}
         onClose={movieDetails.closeDetails}
         onWatchToggle={movieDetails.toggleWatch}
+        onWatchlistToggle={movieDetails.toggleWatchlist}
       />
     </div>
   );

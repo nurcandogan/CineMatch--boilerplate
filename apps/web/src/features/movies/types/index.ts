@@ -42,7 +42,9 @@ export interface MovieInteraction {
     tmdbMovieId: number;
     isWatched: boolean;
     rating?: number;
+    isInWatchlist?: boolean;
     movie: Movie;
+    updatedAt?: string;
 }
 
 export interface DiscoverResponse {
@@ -83,8 +85,10 @@ export interface MovieDetailsModalProps {
     movie: MovieDetails | null | undefined;
     isLoading: boolean;
     isWatched: boolean;
+    isInWatchlist: boolean;
     onClose: () => void;
     onWatchToggle: () => void;
+    onWatchlistToggle: () => void;
 }
 
 export interface MovieRatingProps {

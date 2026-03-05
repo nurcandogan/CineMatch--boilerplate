@@ -39,6 +39,10 @@ export function useMovies() {
         return interactions.filter(i => i.rating && i.movie);
     }, [interactions]);
 
+    const watchlistMovies = useMemo(() => {
+        return interactions.filter(i => i.isInWatchlist && i.movie);
+    }, [interactions]);
+
     // 3. Fetch Trending Movies for background slider
     const { data: trendingResponse } = useQuery(movieQueries.trending());
 
@@ -65,7 +69,7 @@ export function useMovies() {
     const popularMovies = useMemo(() => popularResponse?.results || [], [popularResponse]);
 
     // 4. Optimistic Mutators helper
-    const updateInteractionOptimistically = useCallback((movie: Movie, newData: { isWatched: boolean; rating?: number }) => {
+    const updateInteractionOptimistically = useCallback((movie: Movie, newData: Partial<MovieInteraction>) => {
         queryClient.setQueryData(movieQueries.interactions().queryKey, (old: MovieInteraction[] | undefined) => {
             const oldArr = Array.isArray(old) ? old : [];
             const index = oldArr.findIndex((i) => i.tmdbMovieId === movie.id);
@@ -74,7 +78,7 @@ export function useMovies() {
                 newArr[index] = { ...newArr[index], ...newData, movie };
                 return newArr;
             } else {
-                return [...oldArr, { tmdbMovieId: movie.id, ...newData, movie } as MovieInteraction];
+                return [...oldArr, { tmdbMovieId: movie.id, isWatched: false, ...newData, movie } as MovieInteraction];
             }
         });
 
@@ -89,6 +93,10 @@ export function useMovies() {
         updateInteractionOptimistically(movie, { isWatched: true, rating });
     }, [updateInteractionOptimistically]);
 
+    const handleWatchlistToggle = useCallback((movie: Movie, isInWatchlist: boolean) => {
+        updateInteractionOptimistically(movie, { isInWatchlist: !isInWatchlist });
+    }, [updateInteractionOptimistically]);
+
     return {
         // State and queries
         movies,
@@ -96,6 +104,7 @@ export function useMovies() {
         interactions,
         watchedMovies,
         ratedMovies,
+        watchlistMovies,
         topRatedMovies,
         upcomingMovies,
         popularMovies,
@@ -108,6 +117,7 @@ export function useMovies() {
 
         // Actions
         handleWatchToggle,
-        handleRate
+        handleRate,
+        handleWatchlistToggle
     };
 }

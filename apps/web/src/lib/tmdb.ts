@@ -2,6 +2,7 @@ export const TMDB_API_KEY = import.meta.env['VITE_TMDB_API_KEY'] || '';
 export const TMDB_TOKEN = import.meta.env['VITE_TMDB_TOKEN'] || '';
 export const TMDB_API_BASE_URL = import.meta.env['VITE_TMDB_API_BASE_URL'] || 'https://api.themoviedb.org/3';
 export const TMDB_IMAGE_BASE_URL = import.meta.env['VITE_TMDB_IMAGE_BASE_URL'] || 'https://image.tmdb.org/t/p';
+import type { Movie, MovieInteraction } from '#/features/movies/types';
 
 const getHeaders = () => {
     const headers: Record<string, string> = {
@@ -122,9 +123,9 @@ export const tmdb = {
         return data ? JSON.parse(data) : [];
     },
 
-    saveMovieInteraction: (tmdbMovieId: number, data: { isWatched: boolean; rating?: number }, movieDetails: any) => {
-        const interactions = tmdb.getMovieInteractions();
-        const existingIndex = interactions.findIndex((i: any) => i.tmdbMovieId === tmdbMovieId);
+    saveMovieInteraction: (tmdbMovieId: number, data: Partial<MovieInteraction>, movieDetails: Movie) => {
+        const interactions: MovieInteraction[] = tmdb.getMovieInteractions();
+        const existingIndex = interactions.findIndex((i: MovieInteraction) => i.tmdbMovieId === tmdbMovieId);
 
         if (existingIndex > -1) {
             interactions[existingIndex] = {
@@ -136,6 +137,7 @@ export const tmdb = {
         } else {
             interactions.push({
                 tmdbMovieId,
+                isWatched: false,
                 ...data,
                 movie: movieDetails, // cached minimal details
                 updatedAt: new Date().toISOString()

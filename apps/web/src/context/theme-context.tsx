@@ -26,37 +26,16 @@ export function ThemeProvider({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, _setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  );
+  const [theme, _setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     const root = window.document.documentElement;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    root.classList.remove('light'); // Ensure 'light' is removed
+    root.classList.add('dark'); // Always add 'dark'
+  }, []);
 
-    const applyTheme = (theme: Theme) => {
-      root.classList.remove('light', 'dark'); // Remove existing theme classes
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-      const effectiveTheme = theme === 'system' ? systemTheme : theme;
-      root.classList.add(effectiveTheme); // Add the new theme class
-    };
-
-    const handleChange = () => {
-      if (theme === 'system') {
-        applyTheme('system');
-      }
-    };
-
-    applyTheme(theme);
-
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [theme]);
-
-  const setTheme = (theme: Theme) => {
-    localStorage.setItem(storageKey, theme);
-    _setTheme(theme);
+  const setTheme = (_theme: Theme) => {
+    // Disabled theme changing, app is permanently dark
   };
 
   const value = {

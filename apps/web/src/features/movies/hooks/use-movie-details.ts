@@ -6,7 +6,7 @@ import type { Movie } from '../types';
 
 export function useMovieDetails() {
     const { selectedMovieId, setSelectedMovieId } = useMovieStore();
-    const { interactions, handleWatchToggle } = useMovies();
+    const { interactions, handleWatchToggle, handleWatchlistToggle } = useMovies();
 
     const { data: movie, isLoading } = useQuery({
         queryKey: ['movie-details', selectedMovieId],
@@ -20,6 +20,7 @@ export function useMovieDetails() {
     const interaction = interactions?.find(i => i.tmdbMovieId === selectedMovieId);
     const isWatched = interaction?.isWatched || false;
     const userRating = interaction?.rating || 0;
+    const isInWatchlist = interaction?.isInWatchlist || false;
 
     const closeDetails = () => setSelectedMovieId(null);
 
@@ -29,13 +30,21 @@ export function useMovieDetails() {
         }
     };
 
+    const toggleWatchlist = () => {
+        if (movie) {
+            handleWatchlistToggle(movie as Movie, isInWatchlist);
+        }
+    };
+
     return {
         selectedMovieId,
         movie,
         isLoading,
         isWatched,
         userRating,
+        isInWatchlist,
         closeDetails,
         toggleWatch,
+        toggleWatchlist,
     };
 }
