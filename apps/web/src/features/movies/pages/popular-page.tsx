@@ -1,6 +1,5 @@
 import { useMovies } from '../hooks/use-movies';
 import { MovieCard } from '../components/movie-card';
-import { MovieDetailsModal } from '../components/movie-details-modal';
 import { RefreshCcw } from 'lucide-react';
 
 import type { Movie } from '../types';
@@ -44,8 +43,6 @@ export function PopularPage() {
                     </div>
                 )}
             </div>
-
-            <MovieDetailsModal />
         </div>
     );
 }

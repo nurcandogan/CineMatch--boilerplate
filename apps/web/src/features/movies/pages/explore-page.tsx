@@ -2,7 +2,6 @@ import { RefreshCcw } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
-import { MovieDetailsModal } from '../components/movie-details-modal';
 import { useMovies } from '../hooks/use-movies';
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 import type { Movie } from '../types';
@@ -42,10 +41,10 @@ export function ExplorePage() {
                         <RefreshCcw className="w-8 h-8 animate-spin text-purple-500" />
                     </div>
                 ) : movies.length > 0 ? (
-                    <div className="animate-in slide-in-from-bottom-4 duration-500 pt-8 pb-12">
+                    <div className="animate-in slide-in-from-bottom-4 duration-500 pt-24 md:pt-32 pb-12">
 
                         {!mood && !maxDuration && (
-                            <div className="space-y-12 mb-12">
+                            <div className="space-y-16 mb-12">
                                 {/* Popular */}
                                 {popularMovies?.length > 0 && (
                                     <div className="space-y-4">
@@ -154,8 +153,6 @@ export function ExplorePage() {
                     </div>
                 )}
             </div>
-            {/* Render Modal */}
-            <MovieDetailsModal />
         </div>
     );
 }

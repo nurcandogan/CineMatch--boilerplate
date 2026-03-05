@@ -1,5 +1,4 @@
 import { GenreRow } from '../components/genre-row';
-import { MovieDetailsModal } from '../components/movie-details-modal';
 
 const MOVIE_GENRES = [
     { title: 'Aksiyon Filmleri', id: 28 },
@@ -26,8 +25,6 @@ export function MoviesPage() {
                     <GenreRow key={genre.id} title={genre.title} genreId={genre.id} />
                 ))}
             </div>
-
-            <MovieDetailsModal />
         </div>
     );
 }

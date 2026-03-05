@@ -1,44 +1,24 @@
-import { useEffect, useState } from 'react';
 import { X, Play, Plus, ThumbsUp, Check } from 'lucide-react';
-import { tmdb } from '#/lib/tmdb';
-import { useMovieStore } from '#/stores/useMovieStore';
-import { useMovies } from '../hooks/use-movies';
 import type { MovieDetails, Video } from '../types';
 
-export function MovieDetailsModal() {
-    const { selectedMovieId, setSelectedMovieId } = useMovieStore();
-    const [movie, setMovie] = useState<MovieDetails | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+export interface MovieDetailsModalProps {
+    isOpen: boolean;
+    movie: MovieDetails | null | undefined;
+    isLoading: boolean;
+    isWatched: boolean;
+    onClose: () => void;
+    onWatchToggle: () => void;
+}
 
-    // Check watch status
-    const { interactions, handleWatchToggle } = useMovies();
-    const interaction = interactions?.find(i => i.tmdbMovieId === selectedMovieId);
-    const isWatched = interaction?.isWatched || false;
-
-    useEffect(() => {
-        if (!selectedMovieId) {
-            setMovie(null);
-            return;
-        }
-
-        const fetchDetails = async () => {
-            setIsLoading(true);
-            try {
-                const data = await tmdb.getMovieDetails(selectedMovieId);
-                setMovie(data);
-            } catch (error) {
-                console.error('Failed to fetch movie details:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchDetails();
-    }, [selectedMovieId]);
-
-    if (!selectedMovieId) return null;
-
-    const onClose = () => setSelectedMovieId(null);
+export function MovieDetailsModal({
+    isOpen,
+    movie,
+    isLoading,
+    isWatched,
+    onClose,
+    onWatchToggle
+}: MovieDetailsModalProps) {
+    if (!isOpen) return null;
 
     const trailer = movie?.videos?.results?.find(
         (v: Video) => v.site === 'YouTube' && v.type === 'Trailer'
@@ -106,7 +86,7 @@ export function MovieDetailsModal() {
                                     </button>
 
                                     <button
-                                        onClick={() => handleWatchToggle(movie, isWatched, interaction?.rating || 0)}
+                                        onClick={onWatchToggle}
                                         className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800/80 text-white backdrop-blur-md border border-white/30 hover:bg-zinc-700 transition-colors"
                                         title={isWatched ? "Listeden Çıkar" : "Listeye Ekle"}
                                     >

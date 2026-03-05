@@ -44,6 +44,13 @@ export const movieQueries = {
             queryFn: () => tmdb.getPopular(),
         }),
 
+    search: (query: string) =>
+        queryOptions({
+            queryKey: ['movies-search', query],
+            queryFn: () => tmdb.searchMovies(query),
+            enabled: !!query,
+        }),
+
     byGenre: (genreId: number) =>
         infiniteQueryOptions({
             queryKey: ['movies-genre', genreId],

@@ -1,7 +1,6 @@
 import { Eye, Star } from 'lucide-react';
 import { useMovies } from '../hooks/use-movies';
 import { MovieCard } from '../components/movie-card';
-import { MovieDetailsModal } from '../components/movie-details-modal';
 import type { MovieInteraction } from '../types';
 
 export function ProfilePage() {
@@ -69,8 +68,6 @@ export function ProfilePage() {
                     )}
                 </div>
             </div>
-
-            <MovieDetailsModal />
         </div>
     );
 }
