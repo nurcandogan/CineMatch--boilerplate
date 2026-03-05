@@ -4,11 +4,7 @@ import { useMovieStore } from '#/stores/useMovieStore';
 import { MOODS } from '../constants';
 import { MoodButton } from './mood-button';
 import { useSlider } from '../hooks/use-slider';
-import type { Movie } from '../types';
-
-interface HeroSliderProps {
-    trendingMovies: Movie[];
-}
+import type { Movie, HeroSliderProps } from '../types';
 
 export function HeroSlider({ trendingMovies }: HeroSliderProps) {
     const { mood, maxDuration, setMood, setMaxDuration } = useMovieStore();

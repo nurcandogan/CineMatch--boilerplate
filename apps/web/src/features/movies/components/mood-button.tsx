@@ -1,12 +1,5 @@
 import { cn } from '#/lib/utils';
-import { ElementType } from 'react';
-
-export interface MoodButtonProps {
-    label: string;
-    icon: ElementType;
-    isActive: boolean;
-    onClick: () => void;
-}
+import type { MoodButtonProps } from '../types';
 
 export function MoodButton({ label, icon: Icon, isActive, onClick }: MoodButtonProps) {
     return (

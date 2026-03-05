@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { tmdb } from '#/lib/tmdb';
+import type { DiscoverResponse } from '../types';
 
 export const movieQueries = {
     discover: (mood?: string | null, maxDuration?: number | undefined) =>
@@ -8,7 +9,7 @@ export const movieQueries = {
             queryFn: async ({ pageParam = 1 }) => {
                 return await tmdb.discover({ mood: mood || undefined, maxDuration: maxDuration || undefined, page: pageParam as number });
             },
-            getNextPageParam: (lastPage: any) => {
+            getNextPageParam: (lastPage: DiscoverResponse) => {
                 return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined;
             },
             initialPageParam: 1,
@@ -57,7 +58,7 @@ export const movieQueries = {
             queryFn: async ({ pageParam = 1 }) => {
                 return await tmdb.getMoviesByGenre(genreId, pageParam as number);
             },
-            getNextPageParam: (lastPage: any) => {
+            getNextPageParam: (lastPage: DiscoverResponse) => {
                 return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined;
             },
             initialPageParam: 1,

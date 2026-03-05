@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { tmdb } from '#/lib/tmdb';
 import { useMovies } from './use-movies';
+import type { Movie } from '../types';
 
 export function useMovieDetails() {
     const { selectedMovieId, setSelectedMovieId } = useMovieStore();
@@ -24,7 +25,7 @@ export function useMovieDetails() {
 
     const toggleWatch = () => {
         if (movie) {
-            handleWatchToggle(movie as any, isWatched, userRating);
+            handleWatchToggle(movie as Movie, isWatched, userRating);
         }
     };
 

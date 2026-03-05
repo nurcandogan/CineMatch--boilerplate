@@ -1,14 +1,5 @@
 import { GenreRow } from '../components/genre-row';
-
-const MOVIE_GENRES = [
-    { title: 'Aksiyon Filmleri', id: 28 },
-    { title: 'Bilim Kurgu Filmleri', id: 878 },
-    { title: 'Komedi Filmleri', id: 35 },
-    { title: 'Korku Filmleri', id: 27 },
-    { title: 'Romantik Filmler', id: 10749 },
-    { title: 'Animasyonlar', id: 16 },
-    { title: 'Fantastik Serüvenler', id: 14 }
-];
+import { MOVIE_GENRES } from '../constants';
 
 export function MoviesPage() {
     return (

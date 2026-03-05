@@ -1,12 +1,7 @@
 import { Star } from 'lucide-react';
 import { cn } from '#/lib/utils';
 import { useMovieRating } from '../hooks/use-movie-rating';
-
-interface MovieRatingProps {
-    userRating: number;
-    onRate: (rating: number) => void;
-    onClose?: () => void;
-}
+import type { MovieRatingProps } from '../types';
 
 export function MovieRating({ userRating, onRate, onClose }: MovieRatingProps) {
     const {

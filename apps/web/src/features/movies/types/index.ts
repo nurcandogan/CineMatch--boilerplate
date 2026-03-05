@@ -1,3 +1,7 @@
+import type { ElementType } from 'react';
+
+// ==================== MOVIE DATA TYPES ====================
+
 export interface Movie {
     id: number;
     title: string;
@@ -46,4 +50,51 @@ export interface DiscoverResponse {
     results: Movie[];
     total_pages: number;
     total_results: number;
+}
+
+// ==================== COMPONENT PROPS ====================
+
+export interface GenreRowProps {
+    title: string;
+    genreId: number;
+}
+
+export interface HeroSliderProps {
+    trendingMovies: Movie[];
+}
+
+export interface MoodButtonProps {
+    label: string;
+    icon: ElementType;
+    isActive: boolean;
+    onClick: () => void;
+}
+
+export interface MovieCardProps {
+    movie: Movie;
+    isWatched: boolean;
+    userRating: number;
+    onWatchToggle: () => void;
+    onRate: (rating: number) => void;
+}
+
+export interface MovieDetailsModalProps {
+    isOpen: boolean;
+    movie: MovieDetails | null | undefined;
+    isLoading: boolean;
+    isWatched: boolean;
+    onClose: () => void;
+    onWatchToggle: () => void;
+}
+
+export interface MovieRatingProps {
+    userRating: number;
+    onRate: (rating: number) => void;
+    onClose?: () => void;
+}
+
+// ==================== PAGE PROPS ====================
+
+export interface SearchPageProps {
+    query: string;
 }

@@ -1,14 +1,5 @@
 import { X, Play, Plus, ThumbsUp, Check } from 'lucide-react';
-import type { MovieDetails, Video } from '../types';
-
-export interface MovieDetailsModalProps {
-    isOpen: boolean;
-    movie: MovieDetails | null | undefined;
-    isLoading: boolean;
-    isWatched: boolean;
-    onClose: () => void;
-    onWatchToggle: () => void;
-}
+import type { MovieDetails, Video, MovieDetailsModalProps } from '../types';
 
 export function MovieDetailsModal({
     isOpen,

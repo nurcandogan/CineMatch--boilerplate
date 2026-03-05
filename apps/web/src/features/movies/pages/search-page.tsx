@@ -2,12 +2,8 @@ import { RefreshCcw } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { movieQueries } from '#/features/movies/queries/movie-queries';
 import { MovieCard } from '../components/movie-card';
-import type { Movie } from '../types';
+import type { Movie, SearchPageProps } from '../types';
 import { useMovies } from '../hooks/use-movies';
-
-interface SearchPageProps {
-    query: string;
-}
 
 export function SearchPage({ query }: SearchPageProps) {
     const { data: searchResults, isLoading } = useQuery({

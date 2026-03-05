@@ -10,3 +10,13 @@ export const MOODS = [
     { id: 'eglenceli', label: 'Eğlenceli', icon: PartyPopper, color: 'from-yellow-400 to-orange-500' },
     { id: 'zihin_acici', label: 'Zihin Açıcı', icon: Lightbulb, color: 'from-blue-400 to-cyan-500' },
 ];
+
+export const MOVIE_GENRES = [
+    { title: 'Aksiyon Filmleri', id: 28 },
+    { title: 'Bilim Kurgu Filmleri', id: 878 },
+    { title: 'Komedi Filmleri', id: 35 },
+    { title: 'Korku Filmleri', id: 27 },
+    { title: 'Romantik Filmler', id: 10749 },
+    { title: 'Animasyonlar', id: 16 },
+    { title: 'Fantastik Serüvenler', id: 14 }
+];

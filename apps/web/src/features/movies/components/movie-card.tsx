@@ -3,15 +3,7 @@ import { Eye, Star, Info } from 'lucide-react';
 import { cn } from '#/lib/utils';
 import { MovieRating } from './movie-rating';
 import { useMovieCard } from '../hooks/use-movie-card';
-import type { Movie } from '../types';
-
-export interface MovieCardProps {
-    movie: Movie;
-    isWatched: boolean;
-    userRating: number;
-    onWatchToggle: () => void;
-    onRate: (rating: number) => void;
-}
+import type { Movie, MovieCardProps } from '../types';
 
 export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate }: MovieCardProps) {
     const {
