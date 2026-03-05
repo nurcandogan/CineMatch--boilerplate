@@ -23,7 +23,7 @@ export function ProfilePage() {
                         İzleyeceklerim ({watchlistMovies.length})
                     </h2>
                     {watchlistMovies.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                             {watchlistMovies.map((interaction: MovieInteraction) => (
                                 <MovieCard
                                     key={`watchlist-${interaction.tmdbMovieId}`}
@@ -49,7 +49,7 @@ export function ProfilePage() {
                         İzlediğin Filmler ({watchedMovies.length})
                     </h2>
                     {watchedMovies.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                             {watchedMovies.map((interaction: MovieInteraction) => (
                                 <MovieCard
                                     key={interaction.tmdbMovieId}
@@ -75,7 +75,7 @@ export function ProfilePage() {
                         Puanladığın Filmler ({ratedMovies.length})
                     </h2>
                     {ratedMovies.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                             {ratedMovies.map((interaction: MovieInteraction) => (
                                 <MovieCard
                                     key={interaction.tmdbMovieId}

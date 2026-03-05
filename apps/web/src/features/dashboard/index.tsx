@@ -4,7 +4,7 @@ import { MoviesPage } from '#/features/movies/pages/movies-page';
 import { PopularPage } from '#/features/movies/pages/popular-page';
 import { ProfilePage } from '#/features/movies/pages/profile-page';
 import { SearchPage } from '#/features/movies/pages/search-page';
-import { SearchIcon, Bell, X } from 'lucide-react';
+import { SearchIcon, Bell, X, Home, Film, Flame, Bookmark } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { cn } from '#/lib/utils';
 import { useEffect, useState, useRef } from 'react';
@@ -106,8 +106,8 @@ export default function Dashboard() {
           <div ref={searchRef} className="relative flex items-center justify-end">
             <div
               className={cn(
-                "hidden sm:flex items-center bg-background/5 border-border/50 text-foreground overflow-hidden transition-all duration-300 ease-in-out",
-                isSearchOpen ? "w-64 md:w-80 h-10 px-3 rounded-full border bg-background/90 shadow-lg backdrop-blur-md" : "w-10 h-10 px-0 rounded-full border-transparent bg-transparent"
+                "flex items-center bg-background/5 border-border/50 text-foreground overflow-hidden transition-all duration-300 ease-in-out",
+                isSearchOpen ? "w-48 sm:w-64 md:w-80 h-10 px-3 rounded-full border bg-background/90 shadow-lg backdrop-blur-md" : "w-10 h-10 px-0 rounded-full border-transparent bg-transparent"
               )}
             >
               {!isSearchOpen ? (
@@ -148,7 +148,7 @@ export default function Dashboard() {
       </header>
 
       {/* MAIN CONTENT */}
-      <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1">
+      <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1 pb-20 lg:pb-0">
         {isSearchOpen && (searchQuery || debouncedQuery) ? (
           <SearchPage query={debouncedQuery || searchQuery} />
         ) : (
@@ -160,6 +160,38 @@ export default function Dashboard() {
           </>
         )}
       </Main>
+
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/10 flex lg:hidden items-center justify-around h-16 px-4">
+        <button
+          onClick={() => reset()}
+          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'discover' ? "text-white" : "text-white/50")}
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Anasayfa</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('movies')}
+          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'movies' ? "text-white" : "text-white/50")}
+        >
+          <Film className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Filmler</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('popular')}
+          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'popular' ? "text-white" : "text-white/50")}
+        >
+          <Flame className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Popüler</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('profile')}
+          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'profile' ? "text-white" : "text-white/50")}
+        >
+          <Bookmark className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Listem</span>
+        </button>
+      </nav>
 
       <MovieDetailsModal
         isOpen={!!movieDetails.selectedMovieId}
