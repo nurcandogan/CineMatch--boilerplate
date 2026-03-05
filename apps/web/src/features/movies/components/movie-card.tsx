@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Eye, Star, Info } from 'lucide-react';
+import { Eye, Star } from 'lucide-react';
 import { cn } from '#/lib/utils';
 import { MovieRating } from './movie-rating';
 import { useMovieCard } from '../hooks/use-movie-card';
@@ -71,10 +71,6 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
                 </p>
                 <div className="flex items-center gap-2 text-[10px] sm:text-xs text-white/60 font-semibold uppercase tracking-wider">
                     <span>{movie?.release_date ? new Date(movie.release_date).getFullYear() : 'Bilinmiyor'}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1 text-primary-400 dark:text-purple-400">
-                        <Info className="h-3 w-3" /> Detaylar
-                    </span>
                 </div>
             </div>
         </div>
