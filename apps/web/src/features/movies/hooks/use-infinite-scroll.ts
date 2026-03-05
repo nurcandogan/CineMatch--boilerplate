@@ -1,10 +1,5 @@
 import { useEffect, useRef } from 'react';
-
-interface UseInfiniteScrollOptions {
-    hasNextPage: boolean;
-    isFetchingNextPage: boolean;
-    fetchNextPage: () => void;
-}
+import type { UseInfiniteScrollOptions } from '../types';
 
 export function useInfiniteScroll({ hasNextPage, isFetchingNextPage, fetchNextPage }: UseInfiniteScrollOptions) {
     const loadMoreRef = useRef<HTMLDivElement>(null);

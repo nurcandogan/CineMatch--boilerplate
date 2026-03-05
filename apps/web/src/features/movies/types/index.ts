@@ -93,6 +93,30 @@ export interface MovieRatingProps {
     onClose?: () => void;
 }
 
+// ==================== HOOK TYPES ====================
+
+export interface UseInfiniteScrollOptions {
+    hasNextPage: boolean;
+    isFetchingNextPage: boolean;
+    fetchNextPage: () => void;
+}
+
+export interface UseMovieCardProps {
+    movie: Movie;
+    onWatchToggle: () => void;
+}
+
+export interface UseMovieRatingProps {
+    onRate: (rating: number) => void;
+    onClose?: () => void;
+}
+
+export interface UseSliderOptions {
+    totalItems: number;
+    intervalDuration?: number;
+    isEnabled?: boolean;
+}
+
 // ==================== PAGE PROPS ====================
 
 export interface SearchPageProps {

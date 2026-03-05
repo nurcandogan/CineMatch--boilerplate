@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { cn } from '#/lib/utils';
+import { TMDB_IMAGE_BASE_URL } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { MOODS } from '../constants';
 import { MoodButton } from './mood-button';
@@ -18,7 +19,7 @@ export function HeroSlider({ trendingMovies }: HeroSliderProps) {
         <div className="-mx-4 md:-mx-10 lg:-mx-16 -mt-16 relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
             {/* Background Images */}
             {trendingMovies.map((movie: Movie, idx: number) => {
-                const bgUrl = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
+                const bgUrl = `${TMDB_IMAGE_BASE_URL}/original${movie.backdrop_path}`;
                 return (
                     <div
                         key={movie.id}

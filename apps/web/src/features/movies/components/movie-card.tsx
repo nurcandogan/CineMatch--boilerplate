@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Eye, Star } from 'lucide-react';
 import { cn } from '#/lib/utils';
+import { TMDB_IMAGE_BASE_URL } from '#/lib/tmdb';
 import { MovieRating } from './movie-rating';
 import { useMovieCard } from '../hooks/use-movie-card';
 import type { Movie, MovieCardProps } from '../types';
@@ -14,7 +15,7 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
     } = useMovieCard({ movie, onWatchToggle });
 
     const posterUrl = movie?.poster_path
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        ? `${TMDB_IMAGE_BASE_URL}/w500${movie.poster_path}`
         : 'https://via.placeholder.com/500x750?text=No+Poster';
 
     return (

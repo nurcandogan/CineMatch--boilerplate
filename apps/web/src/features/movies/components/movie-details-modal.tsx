@@ -1,4 +1,5 @@
 import { X, Play, Plus, ThumbsUp, Check } from 'lucide-react';
+import { TMDB_IMAGE_BASE_URL } from '#/lib/tmdb';
 import type { MovieDetails, Video, MovieDetailsModalProps } from '../types';
 
 export function MovieDetailsModal({
@@ -53,7 +54,7 @@ export function MovieDetailsModal({
                                 />
                             ) : (
                                 <img
-                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    src={`${TMDB_IMAGE_BASE_URL}/original${movie.backdrop_path}`}
                                     alt={movie.title}
                                     className="w-full h-full object-cover"
                                 />
@@ -154,7 +155,7 @@ export function MovieDetailsModal({
                                                 <div key={person.id} className="flex items-center gap-2">
                                                     {person.profile_path ? (
                                                         <img
-                                                            src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                                                            src={`${TMDB_IMAGE_BASE_URL}/w185${person.profile_path}`}
                                                             alt={person.name}
                                                             className="h-10 w-10 rounded-full object-cover border border-white/10"
                                                         />

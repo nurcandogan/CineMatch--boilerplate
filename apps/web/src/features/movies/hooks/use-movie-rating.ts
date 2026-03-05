@@ -1,9 +1,5 @@
 import { useState } from 'react';
-
-interface UseMovieRatingProps {
-    onRate: (rating: number) => void;
-    onClose?: () => void;
-}
+import type { UseMovieRatingProps } from '../types';
 
 export function useMovieRating({ onRate, onClose }: UseMovieRatingProps) {
     const [isRatingOpen, setIsRatingOpen] = useState(false);

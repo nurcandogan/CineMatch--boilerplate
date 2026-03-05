@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
-
-interface UseSliderOptions {
-    totalItems: number;
-    intervalDuration?: number;
-    isEnabled?: boolean;
-}
+import type { UseSliderOptions } from '../types';
 
 export function useSlider({ totalItems, intervalDuration = 4000, isEnabled = true }: UseSliderOptions) {
     const [currentSlide, setCurrentSlide] = useState(0);
