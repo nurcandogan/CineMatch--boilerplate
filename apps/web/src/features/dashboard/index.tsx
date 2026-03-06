@@ -4,21 +4,19 @@ import { MoviesPage } from '#/features/movies/pages/movies-page';
 import { PopularPage } from '#/features/movies/pages/popular-page';
 import { ProfilePage } from '#/features/movies/pages/profile-page';
 import { SearchPage } from '#/features/movies/pages/search-page';
-import { SearchIcon, Bell, X, Home, Film, Flame, Bookmark } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
-import { cn } from '#/lib/utils';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useMovieDetails } from '#/features/movies/hooks/use-movie-details';
 import { MovieDetailsModal } from '#/features/movies/components/movie-details-modal';
 
+import { Navbar } from '#/features/movies/components/navbar';
+
 export default function Dashboard() {
-  const { activeTab, setActiveTab, reset } = useMovieStore();
+  const { activeTab } = useMovieStore();
   const movieDetails = useMovieDetails();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  const searchRef = useRef<HTMLDivElement>(null);
 
   // Debounce effect
   useEffect(() => {
@@ -42,110 +40,14 @@ export default function Dashboard() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex flex-col font-sans">
-      {/* NAVBAR */}
-      <header
-        className={cn(
-          "fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-12 h-16 transition-colors duration-300",
-          isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border/50" : "bg-gradient-to-b from-black/80 to-transparent"
-        )}
-      >
-        <div className="flex items-center gap-8 lg:gap-12">
-          {/* LOGO */}
-          <span className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none"
-            onClick={() => reset()}>
-            CineMatch
-          </span>
-
-          {/* DESKTOP NAV LINKS */}
-          <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
-            <button
-              onClick={() => reset()}
-              className={cn("transition-colors hover:text-foreground/80", activeTab === 'discover' ? "text-foreground font-bold" : "text-muted-foreground")}
-            >
-              Anasayfa
-            </button>
-            <button
-              onClick={() => setActiveTab('movies')}
-              className={cn("transition-colors hover:text-foreground/80", activeTab === 'movies' ? "text-foreground font-bold" : "text-muted-foreground")}
-            >
-              Filmler
-            </button>
-            <button
-              onClick={() => setActiveTab('popular')}
-              className={cn("transition-colors hover:text-foreground/80", activeTab === 'popular' ? "text-foreground font-bold" : "text-muted-foreground")}
-            >
-              Yeni ve Popüler
-            </button>
-            <button
-              onClick={() => setActiveTab('profile')}
-              className={cn("transition-colors hover:text-foreground/80", activeTab === 'profile' ? "text-foreground font-bold" : "text-muted-foreground")}
-            >
-              Listem
-            </button>
-          </nav>
-        </div>
-
-        {/* RIGHT SIDE ICONS */}
-        <div className="flex items-center gap-4 sm:gap-6 text-foreground">
-          {/* SEARCH COMPONENT */}
-          <div ref={searchRef} className="relative flex items-center justify-end">
-            <div
-              className={cn(
-                "flex items-center bg-background/5 border-border/50 text-foreground overflow-hidden transition-all duration-300 ease-in-out",
-                isSearchOpen ? "w-48 sm:w-64 md:w-80 h-10 px-3 rounded-full border bg-background/90 shadow-lg backdrop-blur-md" : "w-10 h-10 px-0 rounded-full border-transparent bg-transparent"
-              )}
-            >
-              {!isSearchOpen ? (
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className="w-full h-full flex items-center justify-center hover:scale-110 transition-transform hover:text-foreground text-foreground/80 outline-none"
-                >
-                  <SearchIcon className="w-5 h-5" />
-                </button>
-              ) : (
-                <>
-                  <SearchIcon className="w-4 h-4 text-muted-foreground mr-2 shrink-0" />
-                  <input
-                    type="text"
-                    autoFocus
-                    placeholder="Film veya dizi ara..."
-                    className="flex-1 bg-transparent outline-none border-none text-sm placeholder:text-muted-foreground w-full py-1"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="ml-2 hover:bg-muted p-1 rounded-full text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-
-          <button className="hover:scale-110 transition-transform hover:text-foreground text-foreground/80">
-            <Bell className="w-5 h-5" />
-          </button>
-        </div>
-      </header>
+      <Navbar
+        isSearchOpen={isSearchOpen}
+        setIsSearchOpen={setIsSearchOpen}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
 
       {/* MAIN CONTENT */}
       <Main className="pt-0 px-4 md:px-10 lg:px-16 mx-auto w-full max-w-[1920px] bg-transparent flex-1 pb-20 lg:pb-0">
@@ -161,38 +63,6 @@ export default function Dashboard() {
         )}
       </Main>
 
-      {/* MOBILE BOTTOM NAVIGATION */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/10 flex lg:hidden items-center justify-around h-16 px-4">
-        <button
-          onClick={() => reset()}
-          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'discover' ? "text-white" : "text-white/50")}
-        >
-          <Home className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Anasayfa</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('movies')}
-          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'movies' ? "text-white" : "text-white/50")}
-        >
-          <Film className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Filmler</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('popular')}
-          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'popular' ? "text-white" : "text-white/50")}
-        >
-          <Flame className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Popüler</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('profile')}
-          className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'profile' ? "text-white" : "text-white/50")}
-        >
-          <Bookmark className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Listem</span>
-        </button>
-      </nav>
-
       <MovieDetailsModal
         isOpen={!!movieDetails.selectedMovieId}
         movie={movieDetails.movie}
@@ -203,6 +73,6 @@ export default function Dashboard() {
         onWatchToggle={movieDetails.toggleWatch}
         onWatchlistToggle={movieDetails.toggleWatchlist}
       />
-    </div>
+    </div >
   );
 }

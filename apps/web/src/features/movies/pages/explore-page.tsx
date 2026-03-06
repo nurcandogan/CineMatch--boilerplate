@@ -2,6 +2,7 @@ import { RefreshCcw } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
+import { Footer } from '../components/footer';
 import { useMovies } from '../hooks/use-movies';
 import type { Movie } from '../types';
 
@@ -160,6 +161,8 @@ export function ExplorePage() {
                     </div>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 }

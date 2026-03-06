@@ -56,6 +56,13 @@ export interface DiscoverResponse {
 
 // ==================== COMPONENT PROPS ====================
 
+export interface NavbarProps {
+    isSearchOpen: boolean;
+    setIsSearchOpen: (val: boolean) => void;
+    searchQuery: string;
+    setSearchQuery: (val: string) => void;
+}
+
 export interface GenreRowProps {
     title: string;
     genreId: number;
