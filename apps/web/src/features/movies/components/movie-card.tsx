@@ -4,7 +4,7 @@ import { cn } from '#/lib/utils';
 import { TMDB_IMAGE_BASE_URL } from '#/lib/tmdb';
 import { MovieRating } from './movie-rating';
 import { useMovieCard } from '../hooks/use-movie-card';
-import type { Movie, MovieCardProps } from '../types';
+import type { MovieCardProps } from '../types';
 
 export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating, onWatchToggle, onRate }: MovieCardProps) {
     const {
@@ -32,6 +32,8 @@ export const MovieCard = memo(function MovieCard({ movie, isWatched, userRating,
                     src={posterUrl}
                     alt={movie?.title || 'Movie'}
                     onLoad={handleImgLoad}
+                    loading="lazy"
+                    decoding="async"
                     className={cn(
                         "h-full w-full object-cover transition-all duration-700 z-0 relative",
                         isImgLoaded ? "opacity-100 group-hover:scale-105" : "opacity-0 scale-95"
