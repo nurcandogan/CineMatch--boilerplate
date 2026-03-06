@@ -17,37 +17,51 @@ const getHeaders = () => {
 
 export const tmdb = {
     discover: async (query: { mood?: string; maxDuration?: number; page?: number }) => {
-        let url = `${TMDB_API_BASE_URL}/discover/movie?language=tr-TR&sort_by=popularity.desc`;
+        const fetchPage = async (pageNumber: number) => {
+            let url = `${TMDB_API_BASE_URL}/discover/movie?language=tr-TR&sort_by=popularity.desc`;
 
-        if (!TMDB_TOKEN && TMDB_API_KEY) {
-            url += `&api_key=${TMDB_API_KEY}`;
-        }
+            if (!TMDB_TOKEN && TMDB_API_KEY) {
+                url += `&api_key=${TMDB_API_KEY}`;
+            }
 
-        if (query.page) url += `&page=${query.page}`;
-        if (query.maxDuration) url += `&with_runtime.lte=${query.maxDuration}`;
+            url += `&page=${pageNumber}`;
+            if (query.maxDuration) url += `&with_runtime.lte=${query.maxDuration}`;
 
-        // TMDB genre mapping
-        if (query.mood) {
-            const moodMap: Record<string, string> = {
-                'keyifli': '35,10751', // Comedy, Family
-                'heyecanli': '28,53', // Action, Thriller
-                'romantik': '10749', // Romance
-                'melankolik': '18', // Drama
-                'gizemli': '9648', // Mystery
-                'sakin': '99,36', // Documentary, History
-                'eglenceli': '12,16', // Adventure, Animation
-                'zihin_acici': '878,14' // Sci-Fi, Fantasy
-            };
-            const mood = query.mood.toLowerCase();
-            const genres = moodMap[mood];
-            if (genres) url += `&with_genres=${genres}`;
-        }
+            if (query.mood) {
+                const moodMap: Record<string, string> = {
+                    'keyifli': '35,10751',
+                    'heyecanli': '28,53',
+                    'romantik': '10749',
+                    'melankolik': '18',
+                    'gizemli': '9648',
+                    'sakin': '99,36',
+                    'eglenceli': '12,16',
+                    'zihin_acici': '878,14'
+                };
+                const mood = query.mood.toLowerCase();
+                const genres = moodMap[mood];
+                if (genres) url += `&with_genres=${genres}`;
+            }
 
-        const response = await fetch(url, { headers: getHeaders() });
-        if (!response.ok) {
-            throw new Error('TMDB API Error: ' + response.statusText);
-        }
-        return response.json();
+            const response = await fetch(url, { headers: getHeaders() });
+            if (!response.ok) {
+                throw new Error('TMDB API Error: ' + response.statusText);
+            }
+            return response.json();
+        };
+
+        const targetPage = query.page || 1;
+        const [page1, page2] = await Promise.all([
+            fetchPage((targetPage * 2) - 1),
+            fetchPage(targetPage * 2)
+        ]);
+
+        return {
+            page: targetPage,
+            results: [...page1.results, ...page2.results].slice(0, 36),
+            total_pages: Math.ceil(page1.total_pages / 2),
+            total_results: page1.total_results
+        };
     },
 
     getMovieById: async (id: number) => {

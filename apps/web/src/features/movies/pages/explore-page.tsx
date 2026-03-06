@@ -141,7 +141,7 @@ export function ExplorePage() {
                                     >
                                         Önceki
                                     </button>
-                                    <span className="text-white/60 font-medium whitespace-nowrap">Sayfa {discoverPage} / {discoverTotalPages}</span>
+                                    <span className="text-white/60 font-medium whitespace-nowrap hidden">...</span>
                                     <button
                                         disabled={discoverPage >= discoverTotalPages || isDiscoverFetching}
                                         onClick={() => { setDiscoverPage((prev: number) => Math.min(discoverTotalPages, prev + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
