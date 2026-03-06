@@ -3,16 +3,12 @@ import { tmdb } from '#/lib/tmdb';
 import type { DiscoverResponse } from '../types';
 
 export const movieQueries = {
-    discover: (mood?: string | null, maxDuration?: number | undefined) =>
-        infiniteQueryOptions({
-            queryKey: ['movies-discover', mood, maxDuration],
-            queryFn: async ({ pageParam = 1 }) => {
-                return await tmdb.discover({ mood: mood || undefined, maxDuration: maxDuration || undefined, page: pageParam as number });
+    discover: (mood?: string | null, maxDuration?: number | undefined, page: number = 1) =>
+        queryOptions({
+            queryKey: ['movies-discover', mood, maxDuration, page],
+            queryFn: async () => {
+                return await tmdb.discover({ mood: mood || undefined, maxDuration: maxDuration || undefined, page });
             },
-            getNextPageParam: (lastPage: DiscoverResponse) => {
-                return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined;
-            },
-            initialPageParam: 1,
         }),
 
     interactions: () =>

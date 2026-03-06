@@ -3,7 +3,6 @@ import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
 import { useMovies } from '../hooks/use-movies';
-import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 import type { Movie } from '../types';
 
 export function ExplorePage() {
@@ -16,18 +15,13 @@ export function ExplorePage() {
         upcomingMovies,
         popularMovies,
         isDiscoverLoading,
-        hasNextPage,
-        isFetchingNextPage,
-        fetchNextPage,
+        isDiscoverFetching,
+        discoverPage,
+        setDiscoverPage,
+        discoverTotalPages,
         handleWatchToggle,
         handleRate
     } = useMovies();
-
-    const { loadMoreRef } = useInfiniteScroll({
-        hasNextPage,
-        isFetchingNextPage,
-        fetchNextPage
-    });
 
     return (
         <div className="w-full flex-1 animate-in fade-in duration-500 pb-12">
@@ -137,11 +131,24 @@ export function ExplorePage() {
                                 })}
                             </div>
 
-                            {hasNextPage && (
-                                <div ref={loadMoreRef} className="flex justify-center mt-12 mb-8">
-                                    <div className="px-8 py-3 rounded-full bg-black/5 dark:bg-white/5 border border-border text-foreground font-bold backdrop-blur-md flex items-center gap-2 shadow-2xl">
-                                        <RefreshCcw className="w-5 h-5 animate-spin" /> Yükleniyor...
-                                    </div>
+                            {/* PAGINATION CONTROLS */}
+                            {discoverTotalPages > 1 && (
+                                <div className="flex justify-center items-center gap-4 mt-12 mb-8">
+                                    <button
+                                        disabled={discoverPage === 1 || isDiscoverFetching}
+                                        onClick={() => { setDiscoverPage((prev: number) => Math.max(1, prev - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                                        className="px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 disabled:opacity-50 transition-colors backdrop-blur-sm"
+                                    >
+                                        Önceki
+                                    </button>
+                                    <span className="text-white/60 font-medium whitespace-nowrap">Sayfa {discoverPage} / {discoverTotalPages}</span>
+                                    <button
+                                        disabled={discoverPage >= discoverTotalPages || isDiscoverFetching}
+                                        onClick={() => { setDiscoverPage((prev: number) => Math.min(discoverTotalPages, prev + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                                        className="px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 disabled:opacity-50 transition-colors backdrop-blur-sm"
+                                    >
+                                        Sonraki
+                                    </button>
                                 </div>
                             )}
                         </div>

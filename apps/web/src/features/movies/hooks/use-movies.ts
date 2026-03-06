@@ -1,5 +1,5 @@
-import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo, useState } from 'react';
 import { tmdb } from '#/lib/tmdb';
 import { useMovieStore } from '#/stores/useMovieStore';
 import type { Movie, MovieInteraction } from '../types';
@@ -9,19 +9,22 @@ export function useMovies() {
     const { mood, maxDuration, activeTab } = useMovieStore();
     const queryClient = useQueryClient();
 
+    const [discoverPage, setDiscoverPage] = useState(1);
+
     const {
         data: discoverResponse,
         isLoading: isDiscoverLoading,
-        isFetchingNextPage,
-        fetchNextPage,
-        hasNextPage
-    } = useInfiniteQuery({
-        ...movieQueries.discover(mood, maxDuration),
+        isFetching: isDiscoverFetching
+    } = useQuery({
+        ...movieQueries.discover(mood, maxDuration, discoverPage),
         enabled: activeTab === 'discover',
     });
 
+    const discoverTotalPages = discoverResponse?.total_pages || 1;
+
     const movies = useMemo(() => {
-        return discoverResponse?.pages.flatMap(page => page.results) || [];
+        const allMovies = discoverResponse?.results || [];
+        return allMovies;
     }, [discoverResponse]);
 
     // 2. Fetch User Interactions (Watched & Rated)
@@ -111,9 +114,10 @@ export function useMovies() {
 
         // Loaders & Pagination
         isDiscoverLoading,
-        hasNextPage,
-        isFetchingNextPage,
-        fetchNextPage,
+        isDiscoverFetching,
+        discoverPage,
+        setDiscoverPage,
+        discoverTotalPages,
 
         // Actions
         handleWatchToggle,

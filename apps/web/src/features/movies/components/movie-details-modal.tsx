@@ -163,8 +163,6 @@ export function MovieDetailsModal({
                                                         <img
                                                             src={`${TMDB_IMAGE_BASE_URL}/w185${person.profile_path}`}
                                                             alt={person.name}
-                                                            loading="lazy"
-                                                            decoding="async"
                                                             className="h-10 w-10 rounded-full object-cover border border-white/10"
                                                         />
                                                     ) : (
