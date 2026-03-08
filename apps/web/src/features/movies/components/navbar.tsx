@@ -30,24 +30,28 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
                             to="/"
                             className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
                             activeOptions={{ exact: true }}
+                            preload={false}
                         >
                             Anasayfa
                         </Link>
                         <Link
                             to="/movies"
                             className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
+                            preload={false}
                         >
                             Filmler
                         </Link>
                         <Link
                             to="/populer-movies"
                             className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
+                            preload={false}
                         >
                             Yeni ve Popüler
                         </Link>
                         <Link
                             to="/profile"
                             className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
+                            preload={false}
                         >
                             Listem
                         </Link>
@@ -106,6 +110,7 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
                 <Link
                     to="/"
                     activeOptions={{ exact: true }}
+                    preload={false}
                     className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Home className="w-5 h-5" />
@@ -113,6 +118,7 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
                 </Link>
                 <Link
                     to="/movies"
+                    preload={false}
                     className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Film className="w-5 h-5" />
@@ -120,6 +126,7 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
                 </Link>
                 <Link
                     to="/populer-movies"
+                    preload={false}
                     className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Flame className="w-5 h-5" />
@@ -127,6 +134,7 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
                 </Link>
                 <Link
                     to="/profile"
+                    preload={false}
                     className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Bookmark className="w-5 h-5" />
