@@ -23,7 +23,9 @@ import { Route as authOtpRouteImport } from './routes/(auth)/otp'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
+import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedPostsIndexRouteImport } from './routes/_authenticated/posts/index'
+import { Route as AuthenticatedPopulerMoviesIndexRouteImport } from './routes/_authenticated/populer-movies/index'
 import { Route as AuthenticatedMoviesIndexRouteImport } from './routes/_authenticated/movies/index'
 import { Route as AuthenticatedLocationsIndexRouteImport } from './routes/_authenticated/locations/index'
 import { Route as AuthenticatedGlobalRolesIndexRouteImport } from './routes/_authenticated/global-roles/index'
@@ -126,11 +128,23 @@ const AuthenticatedProjectsIndexRoute =
     path: '/projects/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProfileIndexRoute =
+  AuthenticatedProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPostsIndexRoute = AuthenticatedPostsIndexRouteImport.update({
   id: '/posts/',
   path: '/posts/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPopulerMoviesIndexRoute =
+  AuthenticatedPopulerMoviesIndexRouteImport.update({
+    id: '/populer-movies/',
+    path: '/populer-movies/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMoviesIndexRoute =
   AuthenticatedMoviesIndexRouteImport.update({
     id: '/movies/',
@@ -353,7 +367,9 @@ export interface FileRoutesByFullPath {
   '/global-roles': typeof AuthenticatedGlobalRolesIndexRoute
   '/locations': typeof AuthenticatedLocationsIndexRoute
   '/movies': typeof AuthenticatedMoviesIndexRoute
+  '/populer-movies': typeof AuthenticatedPopulerMoviesIndexRoute
   '/posts': typeof AuthenticatedPostsIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
   '/demo/settings/account': typeof AuthenticatedDemoSettingsAccountRoute
@@ -399,7 +415,9 @@ export interface FileRoutesByTo {
   '/global-roles': typeof AuthenticatedGlobalRolesIndexRoute
   '/locations': typeof AuthenticatedLocationsIndexRoute
   '/movies': typeof AuthenticatedMoviesIndexRoute
+  '/populer-movies': typeof AuthenticatedPopulerMoviesIndexRoute
   '/posts': typeof AuthenticatedPostsIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
   '/demo/settings/account': typeof AuthenticatedDemoSettingsAccountRoute
@@ -449,7 +467,9 @@ export interface FileRoutesById {
   '/_authenticated/global-roles/': typeof AuthenticatedGlobalRolesIndexRoute
   '/_authenticated/locations/': typeof AuthenticatedLocationsIndexRoute
   '/_authenticated/movies/': typeof AuthenticatedMoviesIndexRoute
+  '/_authenticated/populer-movies/': typeof AuthenticatedPopulerMoviesIndexRoute
   '/_authenticated/posts/': typeof AuthenticatedPostsIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
   '/_authenticated/demo/settings/account': typeof AuthenticatedDemoSettingsAccountRoute
@@ -498,7 +518,9 @@ export interface FileRouteTypes {
     | '/global-roles'
     | '/locations'
     | '/movies'
+    | '/populer-movies'
     | '/posts'
+    | '/profile'
     | '/projects'
     | '/users'
     | '/demo/settings/account'
@@ -544,7 +566,9 @@ export interface FileRouteTypes {
     | '/global-roles'
     | '/locations'
     | '/movies'
+    | '/populer-movies'
     | '/posts'
+    | '/profile'
     | '/projects'
     | '/users'
     | '/demo/settings/account'
@@ -593,7 +617,9 @@ export interface FileRouteTypes {
     | '/_authenticated/global-roles/'
     | '/_authenticated/locations/'
     | '/_authenticated/movies/'
+    | '/_authenticated/populer-movies/'
     | '/_authenticated/posts/'
+    | '/_authenticated/profile/'
     | '/_authenticated/projects/'
     | '/_authenticated/users/'
     | '/_authenticated/demo/settings/account'
@@ -721,11 +747,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjectsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/posts/': {
       id: '/_authenticated/posts/'
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof AuthenticatedPostsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/populer-movies/': {
+      id: '/_authenticated/populer-movies/'
+      path: '/populer-movies'
+      fullPath: '/populer-movies'
+      preLoaderRoute: typeof AuthenticatedPopulerMoviesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/movies/': {
@@ -1020,7 +1060,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedGlobalRolesIndexRoute: typeof AuthenticatedGlobalRolesIndexRoute
   AuthenticatedLocationsIndexRoute: typeof AuthenticatedLocationsIndexRoute
   AuthenticatedMoviesIndexRoute: typeof AuthenticatedMoviesIndexRoute
+  AuthenticatedPopulerMoviesIndexRoute: typeof AuthenticatedPopulerMoviesIndexRoute
   AuthenticatedPostsIndexRoute: typeof AuthenticatedPostsIndexRoute
+  AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
   AuthenticatedDemoAppsIndexRoute: typeof AuthenticatedDemoAppsIndexRoute
@@ -1055,7 +1097,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedGlobalRolesIndexRoute: AuthenticatedGlobalRolesIndexRoute,
   AuthenticatedLocationsIndexRoute: AuthenticatedLocationsIndexRoute,
   AuthenticatedMoviesIndexRoute: AuthenticatedMoviesIndexRoute,
+  AuthenticatedPopulerMoviesIndexRoute: AuthenticatedPopulerMoviesIndexRoute,
   AuthenticatedPostsIndexRoute: AuthenticatedPostsIndexRoute,
+  AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
   AuthenticatedDemoAppsIndexRoute: AuthenticatedDemoAppsIndexRoute,

@@ -1,12 +1,11 @@
 import { SearchIcon, Bell, X, Home, Film, Flame, Bookmark } from 'lucide-react';
-import { useMovieStore } from '#/stores/useMovieStore';
 import { cn } from '#/lib/utils';
 import { useRef } from 'react';
+import { Link } from '@tanstack/react-router';
 import type { NavbarProps } from '../types';
 import { useScroll } from '../hooks/use-scroll';
 
 export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQuery }: NavbarProps) {
-    const { activeTab, setActiveTab, reset } = useMovieStore();
     const { isScrolled } = useScroll();
     const searchRef = useRef<HTMLDivElement>(null);
 
@@ -21,37 +20,37 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
             >
                 <div className="flex items-center gap-8 lg:gap-12">
                     {/* LOGO */}
-                    <span className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none"
-                        onClick={() => reset()}>
+                    <Link to="/" className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none">
                         CineMatch
-                    </span>
+                    </Link>
 
                     {/* DESKTOP NAV LINKS */}
                     <nav className="hidden lg:flex items-center gap-4 text-sm font-medium">
-                        <button
-                            onClick={() => reset()}
-                            className={cn("transition-colors hover:text-foreground/80", activeTab === 'discover' ? "text-foreground font-bold" : "text-muted-foreground")}
+                        <Link
+                            to="/"
+                            className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
+                            activeOptions={{ exact: true }}
                         >
                             Anasayfa
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('movies')}
-                            className={cn("transition-colors hover:text-foreground/80", activeTab === 'movies' ? "text-foreground font-bold" : "text-muted-foreground")}
+                        </Link>
+                        <Link
+                            to="/movies"
+                            className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
                         >
                             Filmler
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('popular')}
-                            className={cn("transition-colors hover:text-foreground/80", activeTab === 'popular' ? "text-foreground font-bold" : "text-muted-foreground")}
+                        </Link>
+                        <Link
+                            to="/populer-movies"
+                            className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
                         >
                             Yeni ve Popüler
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('profile')}
-                            className={cn("transition-colors hover:text-foreground/80", activeTab === 'profile' ? "text-foreground font-bold" : "text-muted-foreground")}
+                        </Link>
+                        <Link
+                            to="/profile"
+                            className="transition-colors text-muted-foreground hover:text-foreground/80 [&.active]:text-foreground [&.active]:font-bold"
                         >
                             Listem
-                        </button>
+                        </Link>
                     </nav>
                 </div>
 
@@ -104,34 +103,35 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
 
             {/* MOBILE BOTTOM NAVIGATION */}
             <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/10 flex lg:hidden items-center justify-around h-16 px-4">
-                <button
-                    onClick={() => reset()}
-                    className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'discover' ? "text-white" : "text-white/50")}
+                <Link
+                    to="/"
+                    activeOptions={{ exact: true }}
+                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Home className="w-5 h-5" />
                     <span className="text-[10px] font-medium">Anasayfa</span>
-                </button>
-                <button
-                    onClick={() => setActiveTab('movies')}
-                    className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'movies' ? "text-white" : "text-white/50")}
+                </Link>
+                <Link
+                    to="/movies"
+                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Film className="w-5 h-5" />
                     <span className="text-[10px] font-medium">Filmler</span>
-                </button>
-                <button
-                    onClick={() => setActiveTab('popular')}
-                    className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'popular' ? "text-white" : "text-white/50")}
+                </Link>
+                <Link
+                    to="/populer-movies"
+                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Flame className="w-5 h-5" />
                     <span className="text-[10px] font-medium">Popüler</span>
-                </button>
-                <button
-                    onClick={() => setActiveTab('profile')}
-                    className={cn("flex flex-col items-center justify-center w-full h-full gap-1 transition-colors", activeTab === 'profile' ? "text-white" : "text-white/50")}
+                </Link>
+                <Link
+                    to="/profile"
+                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors text-white/50 [&.active]:text-white"
                 >
                     <Bookmark className="w-5 h-5" />
                     <span className="text-[10px] font-medium">Listem</span>
-                </button>
+                </Link>
             </nav>
         </>
     );

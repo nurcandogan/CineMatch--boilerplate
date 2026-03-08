@@ -119,7 +119,7 @@ export const tmdb = {
     },
 
     getMovieDetails: async (id: number) => {
-        let url = `${TMDB_API_BASE_URL}/movie/${id}?language=tr-TR&append_to_response=credits,videos`;
+        let url = `${TMDB_API_BASE_URL}/movie/${id}?language=tr-TR&append_to_response=credits,videos&include_video_language=tr,en-US,en,null`;
 
         if (!TMDB_TOKEN && TMDB_API_KEY) {
             url += `&api_key=${TMDB_API_KEY}`;
