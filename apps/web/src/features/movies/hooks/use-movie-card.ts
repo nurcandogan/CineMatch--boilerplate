@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMovieStore } from '#/stores/useMovieStore';
-import type { Movie, UseMovieCardProps } from '../types';
+import type { UseMovieCardProps } from '../types';
 
 export function useMovieCard({ movie, onWatchToggle }: UseMovieCardProps) {
     const [isImgLoaded, setIsImgLoaded] = useState(false);

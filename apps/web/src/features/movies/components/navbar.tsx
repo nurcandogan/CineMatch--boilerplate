@@ -20,7 +20,7 @@ export function Navbar({ isSearchOpen, setIsSearchOpen, searchQuery, setSearchQu
             >
                 <div className="flex items-center gap-8 lg:gap-12">
                     {/* LOGO */}
-                    <Link to="/" className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none">
+                    <Link to="/" className="font-black text-2xl md:text-3xl tracking-tighter text-red-600 cursor-pointer select-none" preload={false}>
                         CineMatch
                     </Link>
 
