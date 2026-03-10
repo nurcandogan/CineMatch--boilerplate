@@ -1,5 +1,4 @@
 export const TMDB_API_KEY = import.meta.env['VITE_TMDB_API_KEY'] || '';
-export const TMDB_TOKEN = import.meta.env['VITE_TMDB_TOKEN'] || '';
 export const TMDB_API_BASE_URL = import.meta.env['VITE_TMDB_API_BASE_URL'] || 'https://api.themoviedb.org/3';
 export const TMDB_IMAGE_BASE_URL = import.meta.env['VITE_TMDB_IMAGE_BASE_URL'] || 'https://image.tmdb.org/t/p';
 import type { Movie, MovieInteraction } from '#/features/movies/types';
@@ -9,9 +8,6 @@ const getHeaders = () => {
         'Content-Type': 'application/json'
     };
 
-    if (TMDB_TOKEN) {
-        headers['Authorization'] = `Bearer ${TMDB_TOKEN}`;
-    }
     return headers;
 };
 
@@ -20,7 +16,7 @@ export const tmdb = {
         const fetchPage = async (pageNumber: number) => {
             let url = `${TMDB_API_BASE_URL}/discover/movie?language=tr-TR&sort_by=popularity.desc`;
 
-            if (!TMDB_TOKEN && TMDB_API_KEY) {
+            if (TMDB_API_KEY) {
                 url += `&api_key=${TMDB_API_KEY}`;
             }
 
@@ -67,7 +63,7 @@ export const tmdb = {
     getMovieById: async (id: number) => {
         let url = `${TMDB_API_BASE_URL}/movie/${id}?language=tr-TR`;
 
-        if (!TMDB_TOKEN && TMDB_API_KEY) {
+        if (TMDB_API_KEY) {
             url += `&api_key=${TMDB_API_KEY}`;
         }
 
@@ -80,7 +76,7 @@ export const tmdb = {
 
     getTopRated: async () => {
         let url = `${TMDB_API_BASE_URL}/movie/top_rated?language=tr-TR&page=1`;
-        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        if (TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
         const response = await fetch(url, { headers: getHeaders() });
         if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
         return response.json();
@@ -88,7 +84,7 @@ export const tmdb = {
 
     getUpcoming: async () => {
         let url = `${TMDB_API_BASE_URL}/movie/upcoming?language=tr-TR&page=1`;
-        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        if (TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
         const response = await fetch(url, { headers: getHeaders() });
         if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
         return response.json();
@@ -96,7 +92,7 @@ export const tmdb = {
 
     getPopular: async () => {
         let url = `${TMDB_API_BASE_URL}/movie/popular?language=tr-TR&page=1`;
-        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        if (TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
         const response = await fetch(url, { headers: getHeaders() });
         if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
         return response.json();
@@ -104,7 +100,7 @@ export const tmdb = {
 
     searchMovies: async (query: string) => {
         let url = `${TMDB_API_BASE_URL}/search/movie?language=tr-TR&query=${encodeURIComponent(query)}&page=1`;
-        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        if (TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
         const response = await fetch(url, { headers: getHeaders() });
         if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
         return response.json();
@@ -112,7 +108,7 @@ export const tmdb = {
 
     getMoviesByGenre: async (genreId: number, page: number = 1) => {
         let url = `${TMDB_API_BASE_URL}/discover/movie?language=tr-TR&sort_by=popularity.desc&page=${page}&with_genres=${genreId}`;
-        if (!TMDB_TOKEN && TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
+        if (TMDB_API_KEY) url += `&api_key=${TMDB_API_KEY}`;
         const response = await fetch(url, { headers: getHeaders() });
         if (!response.ok) throw new Error('TMDB API Error: ' + response.statusText);
         return response.json();
@@ -121,7 +117,7 @@ export const tmdb = {
     getMovieDetails: async (id: number) => {
         let url = `${TMDB_API_BASE_URL}/movie/${id}?language=tr-TR&append_to_response=credits,videos&include_video_language=tr,en-US,en,null`;
 
-        if (!TMDB_TOKEN && TMDB_API_KEY) {
+        if (TMDB_API_KEY) {
             url += `&api_key=${TMDB_API_KEY}`;
         }
 

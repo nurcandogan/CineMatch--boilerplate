@@ -48,10 +48,10 @@ export function GenreRow({ title, genreId }: GenreRowProps) {
 
             <div className="relative group">
                 <div className="flex overflow-x-auto gap-4 px-4 md:px-8 pb-6 pt-2 snap-x scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                    {movies.map((movie: Movie, idx: number) => {
+                    {movies.map((movie: Movie) => {
                         const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
                         return (
-                            <div key={`${movie.id}-${idx}`} className="min-w-[160px] md:min-w-[200px] lg:min-w-[240px] snap-start">
+                            <div key={`${movie.id}`} className="min-w-[160px] md:min-w-[200px] lg:min-w-[240px] snap-start">
                                 <MovieCard
                                     movie={movie}
                                     isWatched={interaction?.isWatched || false}
