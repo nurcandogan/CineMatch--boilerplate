@@ -1,6 +1,6 @@
 import { RefreshCcw } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { movieQueries } from '#/features/movies/queries/movie-queries';
+import { movieQueries } from '../queries';
 import { MovieCard } from '../components/movie-card';
 import type { Movie, SearchPageProps } from '../types';
 import { useMovies } from '../hooks/use-movies';

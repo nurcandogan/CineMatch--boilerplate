@@ -1,17 +1,18 @@
 import { Main } from '#/components/layout/main';
-import { ExplorePage } from '#/features/movies/pages/explore-page';
-import { MoviesPage } from '#/features/movies/pages/movies-page';
-import { PopularPage } from '#/features/movies/pages/popular-page';
-import { ProfilePage } from '#/features/movies/pages/profile-page';
-import { SearchPage } from '#/features/movies/pages/search-page';
+import {
+  ExplorePage,
+  MoviesPage,
+  PopularPage,
+  ProfilePage,
+  SearchPage,
+  useMovieDetails,
+  MovieDetailsModal,
+  Navbar,
+} from '#/features/movies';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { useEffect, useState } from 'react';
-import { useMovieDetails } from '#/features/movies/hooks/use-movie-details';
-import { MovieDetailsModal } from '#/features/movies/components/movie-details-modal';
 
-import { Navbar } from '#/features/movies/components/navbar';
-
-export default function Dashboard() {
+export default function MoviesDashboard() {
   const { activeTab } = useMovieStore();
   const movieDetails = useMovieDetails();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
