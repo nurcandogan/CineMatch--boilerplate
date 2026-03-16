@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { movieQueries } from '../queries';
 import { MovieCard } from '../components/movie-card';
 import type { Movie, SearchPageProps } from '../types';
-import { useMovies } from '../hooks/use-movies';
+import { useMovieInteractions, useMovieMutations } from '../hooks';
 
 export function SearchPage({ query }: SearchPageProps) {
     const { data: searchResults, isLoading } = useQuery({
@@ -11,7 +11,8 @@ export function SearchPage({ query }: SearchPageProps) {
         enabled: !!query,
     });
 
-    const { interactions, handleWatchToggle, handleRate } = useMovies();
+    const { interactions } = useMovieInteractions();
+    const { handleWatchToggle, handleRate } = useMovieMutations();
 
     const movies = searchResults?.results || [];
 

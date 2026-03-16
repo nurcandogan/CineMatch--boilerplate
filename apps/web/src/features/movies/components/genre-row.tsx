@@ -4,11 +4,12 @@ import { RefreshCcw } from 'lucide-react';
 import { movieQueries } from '../queries/movie-queries';
 import { MovieCard } from './movie-card';
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
-import { useMovies } from '../hooks/use-movies';
+import { useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie, GenreRowProps } from '../types';
 
 export function GenreRow({ title, genreId }: GenreRowProps) {
-    const { interactions, handleWatchToggle, handleRate } = useMovies();
+    const { interactions } = useMovieInteractions();
+    const { handleWatchToggle, handleRate } = useMovieMutations();
     const {
         data,
         isLoading,

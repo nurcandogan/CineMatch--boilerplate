@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import type React from 'react';
 import { useMovieStore } from '#/stores/useMovieStore';
 import type { UseMovieCardProps } from '../types';
 
 export function useMovieCard({ movie, onWatchToggle }: UseMovieCardProps) {
-    const [isImgLoaded, setIsImgLoaded] = useState(false);
     const { setSelectedMovieId } = useMovieStore();
 
     const handleCardClick = (e: React.MouseEvent) => {
@@ -19,14 +18,8 @@ export function useMovieCard({ movie, onWatchToggle }: UseMovieCardProps) {
         onWatchToggle();
     };
 
-    const handleImgLoad = () => {
-        setIsImgLoaded(true);
-    };
-
     return {
-        isImgLoaded,
         handleCardClick,
         handleWatchClick,
-        handleImgLoad,
     };
 }

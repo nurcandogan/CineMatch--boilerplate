@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMovieStore } from '#/stores/useMovieStore';
 import { tmdb } from '#/lib/tmdb';
-import { useMovies } from './use-movies';
+import { useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie } from '../types';
 
 export function useMovieDetails() {
     const { selectedMovieId, setSelectedMovieId } = useMovieStore();
-    const { interactions, handleWatchToggle, handleWatchlistToggle } = useMovies();
+    const { interactions } = useMovieInteractions();
+    const { handleWatchToggle, handleWatchlistToggle } = useMovieMutations();
 
     const { data: movie, isLoading } = useQuery({
         queryKey: ['movie-details', selectedMovieId],

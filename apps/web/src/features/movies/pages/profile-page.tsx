@@ -1,10 +1,11 @@
 import { Eye, Star, Plus } from 'lucide-react';
-import { useMovies } from '../hooks/use-movies';
+import { useMovieInteractions, useMovieMutations } from '../hooks';
 import { MovieCard } from '../components/movie-card';
 import type { MovieInteraction } from '../types';
 
 export function ProfilePage() {
-    const { watchedMovies, ratedMovies, watchlistMovies, handleWatchToggle, handleRate } = useMovies();
+    const { watchedMovies, ratedMovies, watchlistMovies } = useMovieInteractions();
+    const { handleWatchToggle, handleRate } = useMovieMutations();
 
     return (
         <div className="w-full flex-1 animate-in fade-in duration-500 pb-12">

@@ -3,26 +3,24 @@ import { useMovieStore } from '#/stores/useMovieStore';
 import { HeroSlider } from '../components/hero-slider';
 import { MovieCard } from '../components/movie-card';
 import { Footer } from '../components/footer';
-import { useMovies } from '../hooks/use-movies';
+import { useDiscoverMovies, useMovieCategories, useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie } from '../types';
 
 export function ExplorePage() {
     const { mood, maxDuration } = useMovieStore();
+
     const {
         movies,
-        trendingMovies,
-        interactions,
-        topRatedMovies,
-        upcomingMovies,
-        popularMovies,
         isDiscoverLoading,
         isDiscoverFetching,
         discoverPage,
         setDiscoverPage,
         discoverTotalPages,
-        handleWatchToggle,
-        handleRate
-    } = useMovies();
+    } = useDiscoverMovies();
+
+    const { trendingMovies, topRatedMovies, upcomingMovies, popularMovies } = useMovieCategories();
+    const { interactions } = useMovieInteractions();
+    const { handleWatchToggle, handleRate } = useMovieMutations();
 
     return (
         <div className="w-full flex-1 animate-in fade-in duration-500 pb-12">

@@ -1,11 +1,13 @@
-import { useMovies } from '../hooks/use-movies';
+import { useMovieInteractions, useMovieCategories, useMovieMutations } from '../hooks';
 import { MovieCard } from '../components/movie-card';
 import { RefreshCcw } from 'lucide-react';
 
 import type { Movie } from '../types';
 
 export function PopularPage() {
-    const { popularMovies, interactions, handleWatchToggle, handleRate } = useMovies();
+    const { popularMovies } = useMovieCategories();
+    const { interactions } = useMovieInteractions();
+    const { handleWatchToggle, handleRate } = useMovieMutations();
 
     return (
         <div className="w-full flex-1 animate-in fade-in duration-500 pb-12">
