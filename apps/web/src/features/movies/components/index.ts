@@ -6,3 +6,4 @@ export * from './movie-card';
 export * from './movie-details-modal';
 export * from './movie-rating';
 export * from './navbar';
+export * from './movie-grid-section';

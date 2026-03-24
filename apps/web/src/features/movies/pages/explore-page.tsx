@@ -1,8 +1,6 @@
 import { RefreshCcw } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
-import { HeroSlider } from '../components/hero-slider';
-import { MovieCard } from '../components/movie-card';
-import { Footer } from '../components/footer';
+import { Footer, HeroSlider, MovieCard, MovieGridSection } from '../components';
 import { useDiscoverMovies, useMovieCategories, useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie } from '../types';
 
@@ -111,10 +109,9 @@ export function ExplorePage() {
 
                         {/* FILTRELENMIŞ GRID LISTESI (AŞAĞI SCROLL) */}
                         <div className="px-4 md:px-8">
-                            <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-md mb-6">Senin İçin Bulduklarımız</h2>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                            <MovieGridSection title="Senin İçin Bulduklarımız" isEmpty={false}>
                                 {movies.map((movie: Movie, idx: number) => {
-                                    const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
+                                    const interaction = interactions?.find((i: any) => i.tmdbMovieId === movie.id);
                                     const isWatched = interaction?.isWatched || false;
                                     const userRating = interaction?.rating || 0;
                                     return (
@@ -128,7 +125,7 @@ export function ExplorePage() {
                                         />
                                     )
                                 })}
-                            </div>
+                            </MovieGridSection>
 
                             {/* PAGINATION CONTROLS */}
                             {discoverTotalPages > 1 && (
@@ -153,9 +150,14 @@ export function ExplorePage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col h-64 items-center justify-center gap-4 bg-muted/30 border border-border rounded-2xl mx-4 md:mx-8">
-                        <div className="text-4xl">🍿</div>
-                        <p className="text-muted-foreground font-medium">Aradığın kriterlere uygun film bulamadık.</p>
+                    <div className="px-4 md:px-8">
+                        <MovieGridSection
+                            isEmpty={true}
+                            emptyIcon={<div className="text-4xl">🍿</div>}
+                            emptyMessage="Aradığın kriterlere uygun film bulamadık."
+                        >
+                            <></>
+                        </MovieGridSection>
                     </div>
                 )}
             </div>
