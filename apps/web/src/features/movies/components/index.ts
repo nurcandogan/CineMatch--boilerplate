@@ -7,3 +7,4 @@ export * from './movie-details-modal';
 export * from './movie-rating';
 export * from './navbar';
 export * from './movie-grid-section';
+export * from './error-state';

@@ -1,6 +1,6 @@
 import { RefreshCcw } from 'lucide-react';
 import { useMovieStore } from '#/stores/useMovieStore';
-import { Footer, HeroSlider, MovieCard, MovieGridSection } from '../components';
+import { Footer, HeroSlider, MovieCard, MovieGridSection, ErrorState } from '../components';
 import { useDiscoverMovies, useMovieCategories, useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie } from '../types';
 
@@ -11,12 +11,14 @@ export function ExplorePage() {
         movies,
         isDiscoverLoading,
         isDiscoverFetching,
+        isDiscoverError,
+        refetchDiscover,
         discoverPage,
         setDiscoverPage,
         discoverTotalPages,
     } = useDiscoverMovies();
 
-    const { trendingMovies, topRatedMovies, upcomingMovies, popularMovies } = useMovieCategories();
+    const { trendingMovies, topRatedMovies, upcomingMovies, popularMovies, isCategoriesError, refetchCategories } = useMovieCategories();
     const { interactions } = useMovieInteractions();
     const { handleWatchToggle, handleRate } = useMovieMutations();
 
@@ -27,7 +29,14 @@ export function ExplorePage() {
 
             {/* MAIN CONTENT AREA */}
             <div className="space-y-6">
-                {isDiscoverLoading ? (
+                {(isDiscoverError || isCategoriesError) ? (
+                    <div className="pt-24 md:pt-32 pb-12">
+                        <ErrorState onRetry={() => {
+                            if (isDiscoverError) refetchDiscover();
+                            if (isCategoriesError) refetchCategories();
+                        }} />
+                    </div>
+                ) : isDiscoverLoading ? (
                     <div className="flex h-64 items-center justify-center">
                         <RefreshCcw className="w-8 h-8 animate-spin text-purple-500" />
                     </div>

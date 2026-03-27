@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { movieQueries } from '../queries';
 import type { Movie, SearchPageProps } from '../types';
 import { useMovieInteractions, useMovieMutations } from '../hooks';
-import { MovieCard, MovieGridSection } from '../components';
+import { MovieCard, MovieGridSection, ErrorState } from '../components';
 
 export function SearchPage({ query }: SearchPageProps) {
-    const { data: searchResults, isLoading } = useQuery({
+    const { data: searchResults, isLoading, isError, refetch } = useQuery({
         ...movieQueries.search(query),
         enabled: !!query,
     });
@@ -27,6 +27,8 @@ export function SearchPage({ query }: SearchPageProps) {
                     <div className="flex h-64 items-center justify-center">
                         <RefreshCcw className="w-8 h-8 animate-spin text-purple-500" />
                     </div>
+                ) : isError ? (
+                    <ErrorState onRetry={() => refetch()} />
                 ) : (
                     <MovieGridSection
                         isEmpty={movies.length === 0}

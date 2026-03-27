@@ -1,11 +1,11 @@
 import { useMovieInteractions, useMovieCategories, useMovieMutations } from '../hooks';
-import { MovieCard, MovieGridSection } from '../components';
+import { MovieCard, MovieGridSection, ErrorState } from '../components';
 import { RefreshCcw } from 'lucide-react';
 
 import type { Movie } from '../types';
 
 export function PopularPage() {
-    const { popularMovies } = useMovieCategories();
+    const { popularMovies, isCategoriesError, refetchCategories } = useMovieCategories();
     const { interactions } = useMovieInteractions();
     const { handleWatchToggle, handleRate } = useMovieMutations();
 
@@ -19,7 +19,9 @@ export function PopularPage() {
 
             {/* MAIN CONTENT AREA */}
             <div className="px-4 md:px-8 space-y-12 animate-in slide-in-from-bottom-8 fade-in duration-500 pt-8">
-                {popularMovies?.length > 0 ? (
+                {isCategoriesError ? (
+                    <ErrorState onRetry={refetchCategories} />
+                ) : popularMovies?.length > 0 ? (
                     <MovieGridSection isEmpty={false}>
                         {popularMovies.map((movie: Movie) => {
                             const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);

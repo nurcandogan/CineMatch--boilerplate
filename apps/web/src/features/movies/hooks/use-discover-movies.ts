@@ -10,7 +10,9 @@ export function useDiscoverMovies() {
     const {
         data: discoverResponse,
         isLoading: isDiscoverLoading,
-        isFetching: isDiscoverFetching
+        isFetching: isDiscoverFetching,
+        isError: isDiscoverError,
+        refetch: refetchDiscover
     } = useQuery({
         ...movieQueries.discover(mood, maxDuration, discoverPage),
         enabled: activeTab === 'discover',
@@ -26,6 +28,8 @@ export function useDiscoverMovies() {
         movies,
         isDiscoverLoading,
         isDiscoverFetching,
+        isDiscoverError,
+        refetchDiscover,
         discoverPage,
         setDiscoverPage,
         discoverTotalPages,

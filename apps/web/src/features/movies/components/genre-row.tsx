@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { RefreshCcw } from 'lucide-react';
 import { movieQueries } from '../queries/movie-queries';
 import { MovieCard } from './movie-card';
+import { ErrorState } from './error-state';
 import { useInfiniteScroll } from '../hooks/use-infinite-scroll';
 import { useMovieInteractions, useMovieMutations } from '../hooks';
 import type { Movie, GenreRowProps } from '../types';
@@ -13,6 +14,8 @@ export function GenreRow({ title, genreId }: GenreRowProps) {
     const {
         data,
         isLoading,
+        isError,
+        refetch,
         hasNextPage,
         isFetchingNextPage,
         fetchNextPage
@@ -41,6 +44,15 @@ export function GenreRow({ title, genreId }: GenreRowProps) {
         );
     }
 
+    if (isError) {
+        return (
+            <div className="space-y-4">
+                <h2 className="text-xl md:text-2xl font-bold px-4 md:px-8 text-white drop-shadow-md">{title}</h2>
+                <ErrorState onRetry={() => refetch()} />
+            </div>
+        );
+    }
+
     if (!movies.length) return null;
 
     return (
@@ -50,7 +62,7 @@ export function GenreRow({ title, genreId }: GenreRowProps) {
             <div className="relative group">
                 <div className="flex overflow-x-auto gap-4 px-4 md:px-8 pb-6 pt-2 snap-x scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     {movies.map((movie: Movie) => {
-                        const interaction = interactions?.find(i => i.tmdbMovieId === movie.id);
+                        const interaction = interactions?.find((i: any) => i.tmdbMovieId === movie.id);
                         return (
                             <div key={`${movie.id}`} className="min-w-[160px] md:min-w-[200px] lg:min-w-[240px] snap-start">
                                 <MovieCard
