@@ -30,6 +30,8 @@ export default defineConfig({
       '@prisma/client/runtime/library',
       'redis',
       '@onlyjs/api',
+      '@onlyjs/db',
+      '@onlyjs/db/client',
     ],
   },
   build: {
@@ -38,5 +40,5 @@ export default defineConfig({
     // Copy public files but exclude chatbot symlink
     copyPublicDir: true,
   },
-  publicDir: 'public'
+  publicDir: 'public',
 });
