@@ -2,7 +2,8 @@ import { AuthenticatedLayout } from '#/components/layout/authenticated-layout';
 import { CompanyContextProvider } from '#/context/company-context';
 import { api } from '#lib/api.ts';
 import { hasPermission } from '#lib/auth';
-import type { CompanyResponse, OrganizationMembershipSummary } from '#types/api';
+import { AUTH_BYPASS_ENABLED, GUEST_SESSION } from '#lib/auth/guest-session.ts';
+import type { AuthMeResponse, CompanyResponse, OrganizationMembershipSummary } from '#types/api';
 import type { CompanyMembershipInfo } from '#types/router-context';
 import { OrganizationType } from '#types/api';
 import { createFileRoute, redirect } from '@tanstack/react-router';
@@ -21,17 +22,25 @@ export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context }) => {
     const { queryClient } = context;
 
-    // Fetch session data
-    const session = await queryClient.ensureQueryData({
-      queryKey: ['session'],
-      queryFn: () => api.auth.me.get(),
-    });
+    let userData: AuthMeResponse | null = null;
 
-    if (!session.data) {
-      throw redirect({ to: '/sign-in' });
+    try {
+      const session = await queryClient.ensureQueryData({
+        queryKey: ['session'],
+        queryFn: () => api.auth.me.get(),
+      });
+      userData = session.data;
+    } catch {
+      userData = null;
     }
 
-    const userData = session.data;
+    if (!userData) {
+      if (AUTH_BYPASS_ENABLED) {
+        userData = GUEST_SESSION;
+      } else {
+        throw redirect({ to: '/sign-in' });
+      }
+    }
 
     /**
      * Check if user can view all companies
