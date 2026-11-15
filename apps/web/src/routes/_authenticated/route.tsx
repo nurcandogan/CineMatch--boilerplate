@@ -24,20 +24,21 @@ export const Route = createFileRoute('/_authenticated')({
 
     let userData: AuthMeResponse | null = null;
 
-    try {
-      const session = await queryClient.ensureQueryData({
-        queryKey: ['session'],
-        queryFn: () => api.auth.me.get(),
-      });
-      userData = session.data;
-    } catch {
-      userData = null;
-    }
+    // Bypass açıkken localhost API'ye gitme — Vercel'de siyah/askıda ekran yapıyordu
+    if (AUTH_BYPASS_ENABLED) {
+      userData = GUEST_SESSION;
+    } else {
+      try {
+        const session = await queryClient.ensureQueryData({
+          queryKey: ['session'],
+          queryFn: () => api.auth.me.get(),
+        });
+        userData = session.data;
+      } catch {
+        userData = null;
+      }
 
-    if (!userData) {
-      if (AUTH_BYPASS_ENABLED) {
-        userData = GUEST_SESSION;
-      } else {
+      if (!userData) {
         throw redirect({ to: '/sign-in' });
       }
     }
